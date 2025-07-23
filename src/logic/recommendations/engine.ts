@@ -1,5 +1,7 @@
 import { ResearchStudy, Recommendation, UserProfile, RecommendationResult } from '../../types/ResearchData';
 import { researchDatabase, calculateResearchQualityScore } from '../../data/researchDatabase';
+import { SurveyResponses } from '../../types/SurveyResponses';
+import { ResultsSummary } from '../../types/ResultsSummary';
 
 /**
  * Recommendation Engine
@@ -111,12 +113,12 @@ function generateRecommendationFromStudy(
   const category = study.interventionType as 'food' | 'movement' | 'mindfulness';
   
   // Generate specific action based on study
-  let specificAction = study.specificIntervention;
+  const specificAction = study.specificIntervention;
   let frequency = 'daily';
   let duration = '';
   let intensity: 'low' | 'moderate' | 'high' = 'moderate';
   let expectedTimeline = '4-6 weeks';
-  let contraindications: string[] = [];
+  const contraindications: string[] = [];
   
   // Customize based on category
   switch (category) {
@@ -237,11 +239,9 @@ export async function generateRecommendations(userProfile: UserProfile): Promise
  */
 export function suggestLLMPromptForRecommendations({
   userProfile,
-  constraints,
   category
 }: {
   userProfile: UserProfile,
-  constraints?: string[],
   category: 'food' | 'movement' | 'mindfulness'
 }): string {
   // 주요 정보 추출
@@ -309,23 +309,20 @@ export function suggestLLMPromptForRecommendations({
 /**
  * Convert survey results to user profile
  */
-export function createUserProfileFromSurveyResults(surveyData: any, results: any): UserProfile {
+export function createUserProfileFromSurveyResults(surveyData: SurveyResponses, results: ResultsSummary): UserProfile {
   return {
-    hormoneScores: results.scoringBreakdown?.hormoneScores || {
-      androgens: 0,
-      progesterone: 0,
-      estrogen: 0,
-      thyroid: 0,
-      cortisol: 0,
-      insulin: 0
+    hormoneScores: (results.analysis && results.analysis.scores) ? results.analysis.scores : {
+      androgens: 0, progesterone: 0, estrogen: 0, thyroid: 0, cortisol: 0, insulin: 0
     },
-    primaryImbalance: results.primaryImbalance || '',
-    secondaryImbalances: results.secondaryImbalances || [],
+    primaryImbalance: results.analysis?.primaryImbalance || '',
+    secondaryImbalances: results.analysis?.secondaryImbalances || [],
     conditions: surveyData.q10_conditions || [],
     symptoms: surveyData.q4_symptoms || [],
     cyclePhase: results.cyclePhase || 'unknown',
     birthControlStatus: surveyData.q9_birth_control || 'No',
+    age: surveyData.age,
+    ethnicity: surveyData.ethnicity,
     cravings: surveyData.q7_cravings || [],
-    confidence: results.confidence || 'low'
+    confidence: results.confidenceLevel || 'low'
   };
 } 

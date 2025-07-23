@@ -3,16 +3,17 @@ import { useRouter } from 'next/router';
 import { useSearchParams } from 'next/navigation';
 import styles from './Recommendations.module.css';
 import { RecommendationResult, UserProfile } from '../types/ResearchData';
+import { SurveyResponses } from '../types/SurveyResponses';
+import { ResultsSummary } from '../types/ResultsSummary';
 
 const Recommendations: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const responseId = searchParams.get('responseId');
-  const [surveyData, setSurveyData] = useState<any>(null);
-  const [results, setResults] = useState<any>(null);
+  const [surveyData, setSurveyData] = useState<SurveyResponses | null>(null);
+  const [results, setResults] = useState<ResultsSummary | null>(null);
   const [loading, setLoading] = useState(!!responseId);
   const [activeTab, setActiveTab] = useState<'food' | 'movement' | 'mindfulness'>('food');
-  const [confidence, setConfidence] = useState<number | null>(null);
   const [recommendations, setRecommendations] = useState<RecommendationResult | null>(null);
 
   useEffect(() => {
@@ -92,7 +93,6 @@ const Recommendations: React.FC = () => {
       
       console.log('최종 추천 결과:', recResult);
       setRecommendations(recResult);
-      setConfidence(minConfidence);
     } catch (error) {
       console.error('Error generating recommendations:', error);
       // 에러 발생 시에도 로딩 상태 해제

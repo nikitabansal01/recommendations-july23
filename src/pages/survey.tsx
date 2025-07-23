@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { scoreSymptoms } from '../logic/hormones/scoring';
 import { getCyclePhase } from '../logic/hormones/cycleUtils';
-import { SurveyResponses, Question } from '../types';
+import { SurveyResponses, Question, HormoneScores } from '../types';
 import QuestionBlock from '../components/QuestionBlock';
 import RadioGroup from '../components/RadioGroup';
 import CheckboxGroup from '../components/CheckboxGroup';
 import styles from './Survey.module.css';
+import { adjustScoresWithLabs } from '../logic/hormones/scoring';
 
 // Helper functions for scoring breakdown
 function generateSymptomSources(answers: SurveyResponses, cyclePhase: string) {
@@ -91,7 +92,7 @@ function generateSymptomSources(answers: SurveyResponses, cyclePhase: string) {
   return sources;
 }
 
-function generateLabAdjustments(answers: SurveyResponses, finalScores: any) {
+function generateLabAdjustments(answers: SurveyResponses) {
   const adjustments: Array<{lab: string, value: number, threshold: string, adjustment: number, hormone: string, explanation: string}> = [];
   const labs = answers.q11_labs || {};
   
@@ -419,7 +420,7 @@ const Survey: React.FC = () => {
     let finalScores = analysis.scores;
     let conflicts: string[] = [];
     if (Object.values(numericLabs).some(v => v !== undefined && !isNaN(v))) {
-      const adjustResult = require('../logic/hormones/scoring').adjustScoresWithLabs(finalScores, numericLabs);
+      const adjustResult = adjustScoresWithLabs(finalScores, numericLabs);
       finalScores = adjustResult.adjustedScores;
       conflicts = adjustResult.conflicts;
     }
@@ -448,7 +449,7 @@ const Survey: React.FC = () => {
         hormoneScores: finalScores,
         totalScore: analysis.totalScore,
         symptomSources: generateSymptomSources(answers, cyclePhase),
-        labAdjustments: generateLabAdjustments(answers, finalScores),
+        labAdjustments: generateLabAdjustments(answers),
         conflicts,
         labAnalysis: analysis.explanations.filter(exp => 
           exp.toLowerCase().includes('lab') || 
@@ -594,7 +595,7 @@ const Survey: React.FC = () => {
                 checked={answers.q2_dont_remember}
                 onChange={(e) => handleDontRememberChange(e.target.checked)}
               />
-              <span className={styles.checkboxLabel}>I don't remember</span>
+              <span className={styles.checkboxLabel}>I don&apos;t remember</span>
             </label>
           </div>
         );
@@ -607,7 +608,7 @@ const Survey: React.FC = () => {
   return (
     <div className={styles.container}>
       <div style={{ position: 'absolute', top: 16, right: 16, color: '#fff', fontSize: '0.95em', fontWeight: 'normal', zIndex: 1000 }}>
-        🚧 This is a Beta Version — We're still improving!
+        🚧 This is a Beta Version — We&apos;re still improving!
       </div>
       <div className={styles.header}>
         <h1 className={styles.title}>Hormone Health Survey</h1>

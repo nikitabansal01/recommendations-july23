@@ -3,14 +3,17 @@ import { useRouter } from 'next/router';
 import { useSearchParams } from 'next/navigation';
 // import { getCyclePhaseDisplayName } from '../logic/hormones/cycleUtils';
 import styles from './Results.module.css';
+// @ts-expect-error: react-social-icons has no type definitions, ignore type error
 import { SocialIcon } from 'react-social-icons';
+import { SurveyResponses } from '../types/SurveyResponses';
+import { ResultsSummary } from '../types/ResultsSummary';
 
 const Results: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const responseId = searchParams.get('responseId');
-  const [result, setResult] = useState<any>(null);
-  const [surveyData, setSurveyData] = useState<any>(null);
+  const [result, setResult] = useState<ResultsSummary | null>(null);
+  const [surveyData, setSurveyData] = useState<SurveyResponses | null>(null);
   const [loading, setLoading] = useState(!!responseId);
   const reportRef = useRef<HTMLDivElement>(null);
   
@@ -71,7 +74,7 @@ const Results: React.FC = () => {
 
       // Create email content with hormone results
       const subject = 'My Hormone Health Report';
-      const body = createEmailBody(result);
+      const body = createEmailBody(result!);
       const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       
       // Open email client
@@ -81,26 +84,19 @@ const Results: React.FC = () => {
     }
   };
 
-  const createEmailBody = (result: any) => {
+  const createEmailBody = (result: ResultsSummary) => {
     let body = 'My Hormone Health Assessment Results\n\n';
-    body += `Primary Imbalance: ${result.primaryImbalance}\n`;
-    if (result.secondaryImbalances && result.secondaryImbalances.length > 0) {
-      body += `Secondary Imbalances: ${result.secondaryImbalances.join(', ')}\n`;
+    body += `Primary Imbalance: ${result.analysis.primaryImbalance}\n`;
+    if (result.analysis.secondaryImbalances && result.analysis.secondaryImbalances.length > 0) {
+      body += `Secondary Imbalances: ${result.analysis.secondaryImbalances.join(', ')}\n`;
     }
     body += `Cycle Phase: ${result.cyclePhase}\n`;
-    body += `Confidence Level: ${result.confidence}\n\n`;
+    body += `Confidence Level: ${result.confidenceLevel}\n\n`;
     
-    if (result.explanations) {
+    if (result.analysis.explanations) {
       body += 'Explanations:\n';
-      Object.entries(result.explanations || {}).forEach(([hormone, explanation]) => {
-        body += `${hormone}: ${explanation}\n`;
-      });
-    }
-    
-    if (result.conflicts && Array.isArray(result.conflicts) && result.conflicts.length > 0) {
-      body += '\nImportant Notes:\n';
-      result.conflicts.forEach((conflict: string) => {
-        body += `- ${conflict}\n`;
+      result.analysis.explanations.forEach((explanation) => {
+        body += `${explanation}\n`;
       });
     }
     
@@ -247,7 +243,7 @@ const Results: React.FC = () => {
     );
   }
 
-  if (!result || !result.primaryImbalance) {
+  if (!result || !result.analysis.primaryImbalance) {
     return (
       <div className={styles.container}>
         <div className={styles.header}>
@@ -265,16 +261,16 @@ const Results: React.FC = () => {
     );
   }
 
-  const confidenceInfo = getConfidenceDisplay(result.confidence);
-  const cyclePhaseInfo = getCyclePhaseDisplay(result.cyclePhase);
-  const categorizedExplanations = categorizeExplanations(result.explanations || []);
+  const confidenceInfo = getConfidenceDisplay(result?.confidenceLevel || 'low');
+  const cyclePhaseInfo = getCyclePhaseDisplay(result?.cyclePhase || '');
+  const categorizedExplanations = categorizeExplanations(result?.analysis.explanations || []);
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Your Hormone Analysis</h1>
         <p className={styles.subtitle}>
-          Based on your responses and lab data, here's what we found:
+          Based on your responses and lab data, here&apos;s what we found:
         </p>
         
         {/* Confidence Level Display */}
@@ -345,47 +341,47 @@ const Results: React.FC = () => {
             <div className={styles.hormoneCard}>
               <div className={styles.hormoneHeader}>
                 <h3 className={styles.hormoneName}>
-                  {getHormoneName(result.primaryImbalance)}
+                  {getHormoneName(String(result.analysis.primaryImbalance))}
                 </h3>
                 <span className={`${styles.level} ${styles.high}`}>
                   High Priority
                 </span>
               </div>
               <p className={styles.description}>
-                {getHormoneDescription(result.primaryImbalance)}
+                {getHormoneDescription(String(result.analysis.primaryImbalance))}
               </p>
               {/* Explanation for primary */}
-              {result.explanations && result.explanations[result.primaryImbalance] && (
+              {result.analysis.explanations && result.analysis.explanations.find(exp => exp.includes(result.analysis.primaryImbalance)) && (
                 <div className={styles.scoreInfo}>
                   <span className={styles.scoreLabel}>Explanation:</span>
-                  <span className={styles.scoreValue}>{result.explanations[result.primaryImbalance]}</span>
+                  <span className={styles.scoreValue}>{result.analysis.explanations.find(exp => exp.includes(result.analysis.primaryImbalance))}</span>
                 </div>
               )}
             </div>
           </div>
 
           {/* Secondary Imbalances */}
-          {result.secondaryImbalances && result.secondaryImbalances.length > 0 && (
+          {result.analysis.secondaryImbalances && result.analysis.secondaryImbalances.length > 0 && (
             <div className={styles.secondaryResult}>
               <h2 className={styles.resultTitle}>Secondary Hormone Issues</h2>
-              {result.secondaryImbalances.map((hormone: string, index: number) => (
+              {result.analysis.secondaryImbalances.map((hormone: string | null, index: number) => (
                 <div key={index} className={styles.hormoneCard}>
                   <div className={styles.hormoneHeader}>
                     <h3 className={styles.hormoneName}>
-                      {getHormoneName(hormone)}
+                      {getHormoneName(String(hormone))}
                     </h3>
                     <span className={`${styles.level} ${styles.normal}`}>
                       Moderate
                     </span>
                   </div>
                   <p className={styles.description}>
-                    {getHormoneDescription(hormone)}
+                    {getHormoneDescription(String(hormone))}
                   </p>
                   {/* Explanation for secondary */}
-                  {result.explanations && result.explanations[hormone] && (
+                  {result.analysis.explanations && result.analysis.explanations.find(exp => exp.includes(String(hormone))) && (
                     <div className={styles.scoreInfo}>
                       <span className={styles.scoreLabel}>Explanation:</span>
-                      <span className={styles.scoreValue}>{result.explanations[hormone]}</span>
+                      <span className={styles.scoreValue}>{result.analysis.explanations.find(exp => exp.includes(String(hormone)))}</span>
                     </div>
                   )}
                 </div>
@@ -394,24 +390,13 @@ const Results: React.FC = () => {
           )}
 
           {/* Conflicts */}
-          {result.conflicts && result.conflicts.length > 0 && (
-            <div className={styles.explanationsSection}>
-              <h2 className={styles.resultTitle}>⚠️ Important Notes</h2>
-              <ul className={styles.explanationList}>
-                {result.conflicts.map((conflict: string, idx: number) => (
-                  <li key={idx} className={`${styles.explanationItem} ${styles.conflictItem}`}>
-                    {conflict}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          {/* result.conflicts 관련 코드 전체 삭제 */}
 
           {/* Join Us on the Journey (in main container) */}
           <div className={styles.recommendations}>
             <h2 className={styles.resultTitle}>Join Us on the Journey</h2>
             <p className={styles.description}>
-              We're building something meaningful for your hormone health. Stay connected, explore our content, and be among the first to experience it.
+              We&apos;re building something meaningful for your hormone health. Stay connected, explore our content, and be among the first to experience it.
             </p>
             <div className={styles.linkList}>
               {/* Waitlist first */}
@@ -487,7 +472,7 @@ const Results: React.FC = () => {
         ) : (
           <div className={styles.emailSuccess}>
             <span className={styles.successIcon}>✅</span>
-            <span>Thanks! We'll send it shortly.</span>
+            <span>Thanks! We&apos;ll send it shortly.</span>
           </div>
         )}
       </div>
@@ -499,9 +484,9 @@ const Results: React.FC = () => {
           onClick={() => router.push({
             pathname: '/recommendations',
             query: {
-              surveyData: surveyData,
-              results: JSON.stringify(result),
-              responseId: responseId
+              surveyData: surveyData ? JSON.stringify(surveyData) : '',
+              results: result ? JSON.stringify(result) : '',
+              responseId: responseId || ''
             }
           })}
         >

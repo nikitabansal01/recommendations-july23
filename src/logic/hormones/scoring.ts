@@ -379,8 +379,9 @@ export function adjustScoresWithLabs(
 
   // Ensure no negative scores
   Object.keys(adjustedScores).forEach(key => {
-    if (adjustedScores[key as keyof HormoneScores] < 0) {
-      (adjustedScores as any)[key] = 0;
+    const hormoneKey = key as keyof HormoneScores;
+    if (adjustedScores[hormoneKey] < 0) {
+      adjustedScores[hormoneKey] = 0;
     }
   });
 

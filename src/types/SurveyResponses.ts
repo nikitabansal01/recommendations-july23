@@ -19,6 +19,8 @@ export interface SurveyResponses {
   q9_birth_control: string;
   q10_conditions: string[];
   q11_labs: LabValues;
+  age?: number;
+  ethnicity?: string;
 }
 
 export interface Question {

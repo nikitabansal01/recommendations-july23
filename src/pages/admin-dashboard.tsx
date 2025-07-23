@@ -1,39 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styles from './AdminDashboard.module.css';
+import { SurveyResponses } from '../types/SurveyResponses';
+import { ResultsSummary } from '../types/ResultsSummary';
 
 interface UserResponse {
   id: string;
-  surveyData: any;
-  results: {
-    cyclePhase: string;
-    confidence: string;
-    primaryImbalance: string;
-    secondaryImbalances: string[];
-    explanations: Record<string, string>;
-    conflicts: string[];
-    scoringBreakdown?: {
-      hormoneScores: Record<string, number>;
-      totalScore: number;
-      symptomSources: Array<{
-        symptom: string;
-        score: number;
-        hormone: string;
-        explanation: string;
-      }>;
-      labAdjustments: Array<{
-        lab: string;
-        value: number;
-        threshold: string;
-        adjustment: number;
-        hormone: string;
-        explanation: string;
-      }>;
-      conflicts: string[];
-      labAnalysis: string[];
-      confidenceFactors: string[];
-      cyclePhaseImpact: string;
-    };
-  };
+  surveyData: SurveyResponses;
+  results: ResultsSummary;
   timestamp: string;
   createdAt: string;
 }
