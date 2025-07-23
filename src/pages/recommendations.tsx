@@ -27,7 +27,7 @@ const Recommendations: React.FC = () => {
           setSurveyData(data.response.surveyData);
           setResults(data.response.results);
         }
-      } catch (e) {
+      } catch (_) {
         setSurveyData(null);
         setResults(null);
       } finally {
@@ -56,11 +56,11 @@ const Recommendations: React.FC = () => {
       // 기존 방식: const userProfile = createUserProfileFromSurveyResults(surveyData, results);
       // LLM 방식: userProfile, 카테고리별로 API 호출
       const userProfile: UserProfile = {
-        hormoneScores: results.scoringBreakdown?.hormoneScores || {
+        hormoneScores: results.analysis?.scores || {
           androgens: 0, progesterone: 0, estrogen: 0, thyroid: 0, cortisol: 0, insulin: 0
         },
-        primaryImbalance: results.primaryImbalance || '',
-        secondaryImbalances: results.secondaryImbalances || [],
+        primaryImbalance: results.analysis?.primaryImbalance || '',
+        secondaryImbalances: results.analysis?.secondaryImbalances || [],
         conditions: surveyData.q10_conditions || [],
         symptoms: surveyData.q4_symptoms || [],
         cyclePhase: results.cyclePhase || 'unknown',
@@ -68,7 +68,7 @@ const Recommendations: React.FC = () => {
         age: surveyData.age,
         ethnicity: surveyData.ethnicity,
         cravings: surveyData.q7_cravings || [],
-        confidence: results.confidence || 'low'
+        confidence: results.confidenceLevel || 'low'
       };
 
       // 카테고리별로 LLM 추천 요청
@@ -245,12 +245,12 @@ const Recommendations: React.FC = () => {
                 </div>
               </div>
 
-              {recommendation.contraindications?.length > 0 && (
+              {(recommendation.contraindications ?? []).length > 0 && (
                 <div className={styles.contraindications}>
                   <h4>⚠️ Important Notes:</h4>
                   <ul>
-                    {recommendation.contraindications.map((contraindication, index) => (
-                      <li key={index}>{contraindication}</li>
+                    {(recommendation.contraindications ?? []).map((note, idx) => (
+                      <li key={idx}>{note}</li>
                     ))}
                   </ul>
                 </div>

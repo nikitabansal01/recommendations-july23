@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useSearchParams } from 'next/navigation';
-// import { getCyclePhaseDisplayName } from '../logic/hormones/cycleUtils';
 import styles from './Results.module.css';
-// @ts-expect-error: react-social-icons has no type definitions, ignore type error
 import { SocialIcon } from 'react-social-icons';
 import { SurveyResponses } from '../types/SurveyResponses';
 import { ResultsSummary } from '../types/ResultsSummary';
@@ -28,7 +26,7 @@ const Results: React.FC = () => {
           setResult(data.response.results);
           setSurveyData(data.response.surveyData);
         }
-      } catch (e) {
+      } catch (_) {
         setResult(null);
         setSurveyData(null);
       } finally {
@@ -122,7 +120,7 @@ const Results: React.FC = () => {
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff'
-      });
+      } as Parameters<typeof html2canvas>[1]);
       
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
@@ -351,10 +349,10 @@ const Results: React.FC = () => {
                 {getHormoneDescription(String(result.analysis.primaryImbalance))}
               </p>
               {/* Explanation for primary */}
-              {result.analysis.explanations && result.analysis.explanations.find(exp => exp.includes(result.analysis.primaryImbalance)) && (
+              {result.analysis.explanations && result.analysis.explanations.find(exp => exp.includes(String(result.analysis.primaryImbalance))) && (
                 <div className={styles.scoreInfo}>
                   <span className={styles.scoreLabel}>Explanation:</span>
-                  <span className={styles.scoreValue}>{result.analysis.explanations.find(exp => exp.includes(result.analysis.primaryImbalance))}</span>
+                  <span className={styles.scoreValue}>{result.analysis.explanations.find(exp => exp.includes(String(result.analysis.primaryImbalance)))}</span>
                 </div>
               )}
             </div>

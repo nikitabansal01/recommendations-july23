@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { scoreSymptoms } from '../logic/hormones/scoring';
 import { getCyclePhase } from '../logic/hormones/cycleUtils';
-import { SurveyResponses, Question, HormoneScores } from '../types';
+import { SurveyResponses, Question } from '../types';
 import QuestionBlock from '../components/QuestionBlock';
 import RadioGroup from '../components/RadioGroup';
 import CheckboxGroup from '../components/CheckboxGroup';

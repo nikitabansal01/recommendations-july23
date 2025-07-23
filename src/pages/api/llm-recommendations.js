@@ -97,8 +97,8 @@ function parseRecommendationsFromLLM(llmResponse) {
     
     console.log('JSON 배열을 찾을 수 없음');
     return [];
-  } catch (e) {
-    console.error('JSON 파싱 에러:', e);
+  } catch (_) {
+    console.error('JSON 파싱 에러:', _);
     return [];
   }
 }
@@ -140,7 +140,7 @@ function evaluateLLMConfidence(llmResponse) {
     });
     
     return Math.min(qualityScore, 100);
-  } catch (e) {
+  } catch (_) {
     return 20; // JSON 파싱 실패
   }
 }
