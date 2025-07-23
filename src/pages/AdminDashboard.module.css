@@ -1,0 +1,513 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.title {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: white;
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 20px;
+}
+
+.filters {
+  margin: 20px 0;
+}
+
+.filterSelect {
+  background: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-right: 15px;
+}
+
+.testDataButton {
+  background: #9c27b0;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
+  transition: all 0.3s ease;
+}
+
+.testDataButton:hover:not(:disabled) {
+  background: #7b1fa2;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(156, 39, 176, 0.4);
+}
+
+.testDataButton:disabled {
+  background: #4caf50;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.responsesList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.responseCard {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.responseCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  border-color: #667eea;
+}
+
+.responseHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.responseId {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: #666;
+  background: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.confidenceBadge {
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.responseDetails {
+  margin-bottom: 15px;
+}
+
+.responseDetails > div {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.primaryImbalance {
+  color: #d32f2f;
+  font-weight: 600;
+}
+
+.secondaryImbalances {
+  color: #f57c00;
+}
+
+.cyclePhase {
+  color: #388e3c;
+}
+
+.timestamp {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.scoringPreview {
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  border-left: 4px solid #667eea;
+}
+
+.loading {
+  text-align: center;
+  color: white;
+  font-size: 1.5rem;
+  margin-top: 100px;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  border-radius: 15px;
+  max-width: 90%;
+  max-height: 90%;
+  width: 1000px;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f8f9fa;
+  border-radius: 15px 15px 0 0;
+}
+
+.modalHeader h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.closeButton:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.modalBody {
+  padding: 25px;
+}
+
+/* Detailed View Styles */
+.detailedView {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.section {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  border-left: 4px solid #667eea;
+}
+
+.section h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.subsection {
+  margin: 20px 0;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.subsection h4 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.surveyData {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 10px;
+}
+
+.dataItem {
+  background: white;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  font-size: 0.9rem;
+}
+
+.resultsSummary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.resultsSummary > div {
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+}
+
+.scoresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.scoreItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.hormoneName {
+  font-weight: 600;
+  color: #333;
+}
+
+.scoreValue {
+  font-weight: 700;
+  color: #667eea;
+  font-size: 1.1rem;
+}
+
+.totalScore {
+  text-align: center;
+  padding: 12px;
+  background: #667eea;
+  color: white;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.sourcesList,
+.adjustmentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sourceItem,
+.adjustmentItem {
+  background: white;
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+}
+
+.sourceHeader,
+.adjustmentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.symptomName,
+.labName {
+  font-weight: 600;
+  color: #333;
+}
+
+.sourceScore,
+.adjustmentScore {
+  background: #4CAF50;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.sourceDetails,
+.adjustmentDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.hormoneTag {
+  display: inline-block;
+  background: #667eea;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  align-self: flex-start;
+}
+
+.labValue {
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.explanationText {
+  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.confidenceFactorsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.confidenceFactor {
+  padding: 8px 12px;
+  background: white;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  border-left: 3px solid #FF9800;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.cyclePhaseImpactText {
+  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.explanations {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.explanationItem {
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid #4CAF50;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.conflictsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.conflictItem {
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border-left: 3px solid #F44336;
+  color: #d32f2f;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.conflictItem::before {
+  content: "⚠️ ";
+  margin-right: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .responsesList {
+    grid-template-columns: 1fr;
+  }
+  
+  .modalContent {
+    max-width: 95%;
+    margin: 10px;
+  }
+  
+  .surveyData {
+    grid-template-columns: 1fr;
+  }
+  
+  .resultsSummary {
+    grid-template-columns: 1fr;
+  }
+  
+  .scoresGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.8rem;
+  }
+  
+  .responseCard {
+    padding: 15px;
+  }
+  
+  .modalHeader {
+    padding: 15px 20px;
+  }
+  
+  .modalBody {
+    padding: 20px;
+  }
+  
+  .scoresGrid {
+    grid-template-columns: 1fr;
+  }
+} 
