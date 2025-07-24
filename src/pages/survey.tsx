@@ -436,13 +436,18 @@ const Survey: React.FC = () => {
       if (exp.toLowerCase().includes('cortisol')) explanationsByHormone['cortisol'] = exp;
     });
 
+    // Convert explanationsByHormone object to array for results page compatibility
+    const explanationsArray = Object.values(explanationsByHormone);
+
     // Build result object with scoring breakdown for backend storage
     const result = {
       cyclePhase,
-      confidence: analysis.confidenceLevel,
-      primaryImbalance: analysis.primaryImbalance,
-      secondaryImbalances: analysis.secondaryImbalances,
-      explanations: explanationsByHormone,
+      confidenceLevel: analysis.confidenceLevel,
+      analysis: {
+        primaryImbalance: analysis.primaryImbalance,
+        secondaryImbalances: analysis.secondaryImbalances,
+        explanations: explanationsArray,
+      },
       conflicts,
       // Append scoring system data for medical expert verification
       scoringBreakdown: {
@@ -491,9 +496,13 @@ const Survey: React.FC = () => {
         });
       } else {
         console.error('Failed to save response');
-        // 실패 시에도 responseId 없이 이동
+        // 실패 시에도 결과 데이터를 URL 파라미터로 전달
         router.push({
-          pathname: '/results'
+          pathname: '/results',
+          query: {
+            result: JSON.stringify(result),
+            surveyData: JSON.stringify(answers)
+          }
         });
       }
     } catch (error) {

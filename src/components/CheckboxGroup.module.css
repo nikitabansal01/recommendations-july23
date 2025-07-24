@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 20px;
+  padding: 25px 20px;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   background: white;
@@ -24,8 +24,8 @@
 }
 
 .checkboxOption input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   accent-color: #667eea;
   cursor: pointer;
 }

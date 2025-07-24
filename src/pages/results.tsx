@@ -10,12 +10,29 @@ const Results: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const responseId = searchParams.get('responseId');
+  const resultParam = searchParams.get('result');
+  const surveyDataParam = searchParams.get('surveyData');
   const [result, setResult] = useState<ResultsSummary | null>(null);
   const [surveyData, setSurveyData] = useState<SurveyResponses | null>(null);
   const [loading, setLoading] = useState(!!responseId);
   const reportRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
+    // URL 파라미터로 전달된 데이터가 있으면 먼저 처리
+    if (resultParam && surveyDataParam) {
+      try {
+        const parsedResult = JSON.parse(resultParam);
+        const parsedSurveyData = JSON.parse(surveyDataParam);
+        setResult(parsedResult);
+        setSurveyData(parsedSurveyData);
+        setLoading(false);
+        return;
+      } catch (error) {
+        console.error('Error parsing URL parameters:', error);
+      }
+    }
+
+    // responseId가 있으면 API에서 데이터 가져오기
     if (!responseId) return;
     const fetchData = async () => {
       setLoading(true);
@@ -25,8 +42,13 @@ const Results: React.FC = () => {
         if (data.success && data.response) {
           setResult(data.response.results);
           setSurveyData(data.response.surveyData);
+        } else {
+          console.error('Failed to fetch response:', data);
+          setResult(null);
+          setSurveyData(null);
         }
-      } catch (_) {
+      } catch (error) {
+        console.error('Error fetching response:', error);
         setResult(null);
         setSurveyData(null);
       } finally {
@@ -34,7 +56,7 @@ const Results: React.FC = () => {
       }
     };
     fetchData();
-  }, [responseId]);
+  }, [responseId, resultParam, surveyDataParam]);
   
   // State for email functionality
   const [email, setEmail] = useState('');
@@ -84,14 +106,14 @@ const Results: React.FC = () => {
 
   const createEmailBody = (result: ResultsSummary) => {
     let body = 'My Hormone Health Assessment Results\n\n';
-    body += `Primary Imbalance: ${result.analysis.primaryImbalance}\n`;
-    if (result.analysis.secondaryImbalances && result.analysis.secondaryImbalances.length > 0) {
+    body += `Primary Imbalance: ${result.analysis?.primaryImbalance}\n`;
+    if (result.analysis?.secondaryImbalances && result.analysis.secondaryImbalances.length > 0) {
       body += `Secondary Imbalances: ${result.analysis.secondaryImbalances.join(', ')}\n`;
     }
     body += `Cycle Phase: ${result.cyclePhase}\n`;
     body += `Confidence Level: ${result.confidenceLevel}\n\n`;
     
-    if (result.analysis.explanations) {
+    if (result.analysis?.explanations) {
       body += 'Explanations:\n';
       result.analysis.explanations.forEach((explanation) => {
         body += `${explanation}\n`;
@@ -241,7 +263,7 @@ const Results: React.FC = () => {
     );
   }
 
-  if (!result || !result.analysis.primaryImbalance) {
+  if (!result || !result.analysis?.primaryImbalance) {
     return (
       <div className={styles.container}>
         <div className={styles.header}>
@@ -261,7 +283,7 @@ const Results: React.FC = () => {
 
   const confidenceInfo = getConfidenceDisplay(result?.confidenceLevel || 'low');
   const cyclePhaseInfo = getCyclePhaseDisplay(result?.cyclePhase || '');
-  const categorizedExplanations = categorizeExplanations(result?.analysis.explanations || []);
+  const categorizedExplanations = categorizeExplanations(result?.analysis?.explanations || []);
 
   return (
     <div className={styles.container}>
@@ -339,27 +361,27 @@ const Results: React.FC = () => {
             <div className={styles.hormoneCard}>
               <div className={styles.hormoneHeader}>
                 <h3 className={styles.hormoneName}>
-                  {getHormoneName(String(result.analysis.primaryImbalance))}
+                  {getHormoneName(String(result.analysis?.primaryImbalance))}
                 </h3>
                 <span className={`${styles.level} ${styles.high}`}>
                   High Priority
                 </span>
               </div>
               <p className={styles.description}>
-                {getHormoneDescription(String(result.analysis.primaryImbalance))}
+                {getHormoneDescription(String(result.analysis?.primaryImbalance))}
               </p>
               {/* Explanation for primary */}
-              {result.analysis.explanations && result.analysis.explanations.find(exp => exp.includes(String(result.analysis.primaryImbalance))) && (
+              {result.analysis?.explanations && result.analysis.explanations.find(exp => exp.includes(String(result.analysis?.primaryImbalance))) && (
                 <div className={styles.scoreInfo}>
                   <span className={styles.scoreLabel}>Explanation:</span>
-                  <span className={styles.scoreValue}>{result.analysis.explanations.find(exp => exp.includes(String(result.analysis.primaryImbalance)))}</span>
+                  <span className={styles.scoreValue}>{result.analysis.explanations.find(exp => exp.includes(String(result.analysis?.primaryImbalance)))}</span>
                 </div>
               )}
             </div>
           </div>
 
           {/* Secondary Imbalances */}
-          {result.analysis.secondaryImbalances && result.analysis.secondaryImbalances.length > 0 && (
+          {result.analysis?.secondaryImbalances && result.analysis.secondaryImbalances.length > 0 && (
             <div className={styles.secondaryResult}>
               <h2 className={styles.resultTitle}>Secondary Hormone Issues</h2>
               {result.analysis.secondaryImbalances.map((hormone: string | null, index: number) => (
@@ -376,7 +398,7 @@ const Results: React.FC = () => {
                     {getHormoneDescription(String(hormone))}
                   </p>
                   {/* Explanation for secondary */}
-                  {result.analysis.explanations && result.analysis.explanations.find(exp => exp.includes(String(hormone))) && (
+                  {result.analysis?.explanations && result.analysis.explanations.find(exp => exp.includes(String(hormone))) && (
                     <div className={styles.scoreInfo}>
                       <span className={styles.scoreLabel}>Explanation:</span>
                       <span className={styles.scoreValue}>{result.analysis.explanations.find(exp => exp.includes(String(hormone)))}</span>

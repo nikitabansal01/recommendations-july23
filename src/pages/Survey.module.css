@@ -45,14 +45,14 @@
   flex: 1;
   background: white;
   border-radius: 20px;
-  padding: 30px;
+  padding: 40px;
   margin-bottom: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
 }
 
 .question {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 600;
   color: #2d3748;
   margin-bottom: 30px;
@@ -71,7 +71,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 20px;
+  padding: 22px 28px;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   background: white;
@@ -89,8 +89,8 @@
 
 .radioOption input[type="radio"],
 .checkboxOption input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   accent-color: #667eea;
   cursor: pointer;
 }

@@ -27,7 +27,7 @@ const Recommendations: React.FC = () => {
           setSurveyData(data.response.surveyData);
           setResults(data.response.results);
         }
-      } catch (_) {
+      } catch (error) {
         setSurveyData(null);
         setResults(null);
       } finally {
