@@ -17,6 +17,13 @@ const Results: React.FC = () => {
   const [loading, setLoading] = useState(!!responseId);
   const reportRef = useRef<HTMLDivElement>(null);
   
+  // State for email functionality
+  const [email, setEmail] = useState('');
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [responseData, setResponseData] = useState<any>(null);
+
   useEffect(() => {
     // URL 파라미터로 전달된 데이터가 있으면 먼저 처리
     if (resultParam && surveyDataParam) {
@@ -42,6 +49,9 @@ const Results: React.FC = () => {
         if (data.success && data.response) {
           setResult(data.response.results);
           setSurveyData(data.response.surveyData);
+          setResponseData(data.response);
+          // 이메일 없으면 모달 오픈
+          if (!data.response.email) setEmailModalOpen(true);
         } else {
           console.error('Failed to fetch response:', data);
           setResult(null);
@@ -57,50 +67,35 @@ const Results: React.FC = () => {
     };
     fetchData();
   }, [responseId, resultParam, surveyDataParam]);
-  
-  // State for email functionality
-  const [email, setEmail] = useState('');
-  const [emailSent, setEmailSent] = useState(false);
-  const [showEmailInput, setShowEmailInput] = useState(false);
 
   const handleRestart = () => {
     router.push('/survey');
   };
 
-  const handleEmailSubmit = async () => {
-    if (email && isValidEmail(email)) {
-      try {
-        // Save email to API
-        const response = await fetch('/api/save-email', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email,
-            responseId: responseId,
-            timestamp: new Date().toISOString()
-          })
-        });
-
-        if (response.ok) {
-          console.log('Email saved successfully');
-        } else {
-          console.error('Failed to save email');
-        }
-      } catch (error) {
-        console.error('Error saving email:', error);
+  const handleEmailUpdate = async () => {
+    setEmailError('');
+    if (!email || !isValidEmail(email)) {
+      setEmailError('Please enter a valid email.');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const response = await fetch('/api/update-email', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ responseId, email })
+      });
+      if (response.ok) {
+        setEmailModalOpen(false);
+        // 새로고침 없이도 반영
+        setResponseData((prev: any) => ({ ...prev, email }));
+      } else {
+        setEmailError('Failed to update email.');
       }
-
-      // Create email content with hormone results
-      const subject = 'My Hormone Health Report';
-      const body = createEmailBody(result!);
-      const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      
-      // Open email client
-      window.open(mailtoLink);
-      setEmailSent(true);
-      setShowEmailInput(false);
+    } catch (e) {
+      setEmailError('Failed to update email.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -257,6 +252,33 @@ const Results: React.FC = () => {
         <div className={styles.actions}>
           <button className={styles.actionButton} onClick={handleRestart}>
             Take Assessment Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // 이메일 입력 모달
+  if (emailModalOpen) {
+    return (
+      <div className={styles.emailModal}>
+        <div className={styles.emailModalContent}>
+          <h2>Please enter your email to view your results.</h2>
+          <input
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder="your@email.com"
+            className={styles.emailInput}
+            disabled={submitting}
+          />
+          {emailError && <div className={styles.emailError}>{emailError}</div>}
+          <button
+            className={styles.emailSubmitButton}
+            onClick={handleEmailUpdate}
+            disabled={submitting}
+          >
+            Submit & View Results
           </button>
         </div>
       </div>
@@ -450,51 +472,7 @@ const Results: React.FC = () => {
 
       {/* Email Input Section (not in PDF) */}
       <div className={styles.emailSection}>
-        {!emailSent && !showEmailInput ? (
-          <button 
-            className={styles.emailButton}
-            onClick={() => setShowEmailInput(true)}
-          >
-            📧 Want to receive this report via email?
-          </button>
-        ) : showEmailInput && !emailSent ? (
-          <div className={styles.emailInputContainer}>
-            <label htmlFor="email" className={styles.emailLabel}>
-              Enter your email address:
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="your.email@example.com"
-              className={styles.emailInput}
-            />
-            <div className={styles.emailActions}>
-              <button 
-                className={styles.sendEmailButton}
-                onClick={handleEmailSubmit}
-                disabled={!email || !isValidEmail(email)}
-              >
-                Send PDF to My Email
-              </button>
-              <button 
-                className={styles.cancelEmailButton}
-                onClick={() => {
-                  setShowEmailInput(false);
-                  setEmail('');
-                }}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className={styles.emailSuccess}>
-            <span className={styles.successIcon}>✅</span>
-            <span>Thanks! We&apos;ll send it shortly.</span>
-          </div>
-        )}
+        {/* This section is now handled by the forceEmailModal, so it's removed. */}
       </div>
 
       {/* Action Buttons (not in PDF) */}

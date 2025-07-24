@@ -258,6 +258,12 @@ const Survey: React.FC = () => {
       hba1c: ''
     }
   });
+  const [showEmailInput, setShowEmailInput] = useState(false);
+  const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [pendingResult, setPendingResult] = useState<any>(null);
+  const [pendingAnswers, setPendingAnswers] = useState<any>(null);
 
   const questions: Question[] = [
     {
@@ -387,26 +393,13 @@ const Survey: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    // Calculate cycle phase
+    // 설문 결과와 답변을 미리 계산해서 상태에 저장하고, 이메일 입력 모달을 띄움
     const isRegular = answers.q1_period === 'Yes';
     const cycleLength = answers.q1_cycle_length ? parseInt(answers.q1_cycle_length) : 28;
     const cyclePhase = getCyclePhase(answers.q2_last_period, isRegular, cycleLength);
-    
-    // Score symptoms and get analysis
     const analysis = scoreSymptoms(answers, cyclePhase);
-
-    // Prepare lab values for adjustment
     const labs = answers.q11_labs || {};
-    const numericLabs: {
-      freeTestosterone?: number;
-      dhea?: number;
-      lh?: number;
-      fsh?: number;
-      tsh?: number;
-      t3?: number;
-      fastingInsulin?: number;
-      hba1c?: number;
-    } = {};
+    const numericLabs: any = {};
     if (labs.free_t) numericLabs.freeTestosterone = parseFloat(labs.free_t);
     if (labs.dhea) numericLabs.dhea = parseFloat(labs.dhea);
     if (labs.lh) numericLabs.lh = parseFloat(labs.lh);
@@ -415,8 +408,6 @@ const Survey: React.FC = () => {
     if (labs.t3) numericLabs.t3 = parseFloat(labs.t3);
     if (labs.insulin) numericLabs.fastingInsulin = parseFloat(labs.insulin);
     if (labs.hba1c) numericLabs.hba1c = parseFloat(labs.hba1c);
-
-    // Adjust scores with labs if any lab is present
     let finalScores = analysis.scores;
     let conflicts: string[] = [];
     if (Object.values(numericLabs).some(v => v !== undefined && !isNaN(v))) {
@@ -424,8 +415,6 @@ const Survey: React.FC = () => {
       finalScores = adjustResult.adjustedScores;
       conflicts = adjustResult.conflicts;
     }
-
-    // Build explanations by hormone (example logic, can be improved)
     const explanationsByHormone: Record<string, string> = {};
     (analysis.explanations || []).forEach(exp => {
       if (exp.toLowerCase().includes('androgen')) explanationsByHormone['androgens'] = exp;
@@ -435,11 +424,7 @@ const Survey: React.FC = () => {
       if (exp.toLowerCase().includes('thyroid')) explanationsByHormone['thyroid'] = exp;
       if (exp.toLowerCase().includes('cortisol')) explanationsByHormone['cortisol'] = exp;
     });
-
-    // Convert explanationsByHormone object to array for results page compatibility
     const explanationsArray = Object.values(explanationsByHormone);
-
-    // Build result object with scoring breakdown for backend storage
     const result = {
       cyclePhase,
       confidenceLevel: analysis.confidenceLevel,
@@ -449,7 +434,6 @@ const Survey: React.FC = () => {
         explanations: explanationsArray,
       },
       conflicts,
-      // Append scoring system data for medical expert verification
       scoringBreakdown: {
         hormoneScores: finalScores,
         totalScore: analysis.totalScore,
@@ -470,8 +454,18 @@ const Survey: React.FC = () => {
         cyclePhaseImpact: cyclePhase === 'unknown' ? 'Unknown cycle phase reduces confidence' : `Cycle phase: ${cyclePhase}`
       }
     };
+    setPendingResult(result);
+    setPendingAnswers(answers);
+    setShowEmailInput(true);
+  };
 
-    // Save response to API
+  const handleEmailSubmit = async () => {
+    setEmailError('');
+    if (!email || !isValidEmail(email)) {
+      setEmailError('Please enter a valid email.');
+      return;
+    }
+    setSubmitting(true);
     try {
       const response = await fetch('/api/save-response', {
         method: 'POST',
@@ -479,15 +473,14 @@ const Survey: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          surveyData: answers,
-          results: result,
+          surveyData: pendingAnswers,
+          results: pendingResult,
+          email: email,
           timestamp: new Date().toISOString()
         })
       });
-
       if (response.ok) {
         const data = await response.json();
-        // responseId만 쿼리로 전달
         router.push({
           pathname: '/results',
           query: {
@@ -495,28 +488,19 @@ const Survey: React.FC = () => {
           }
         });
       } else {
-        console.error('Failed to save response');
-        // 실패 시에도 결과 데이터를 URL 파라미터로 전달
-        router.push({
-          pathname: '/results',
-          query: {
-            result: JSON.stringify(result),
-            surveyData: JSON.stringify(answers)
-          }
-        });
+        setEmailError('Failed to save. Please try again.');
       }
     } catch (error) {
-      console.error('Error saving response:', error);
-      // Still navigate to results even if save fails
-      router.push({
-        pathname: '/results',
-        query: {
-          result: JSON.stringify(result),
-          surveyData: JSON.stringify(answers)
-        }
-      });
+      setEmailError('Failed to save. Please try again.');
+    } finally {
+      setSubmitting(false);
     }
   };
+
+  function isValidEmail(email: string) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
 
   const currentQ = questions[currentQuestion];
   
@@ -764,6 +748,31 @@ const Survey: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* 이메일 입력 모달/화면 */}
+      {showEmailInput && (
+        <div className={styles.emailModal}>
+          <div className={styles.emailModalContent}>
+            <h2>Please enter your email to view your results.</h2>
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="your@email.com"
+              className={styles.emailInput}
+              disabled={submitting}
+            />
+            {emailError && <div className={styles.emailError}>{emailError}</div>}
+            <button
+              className={styles.emailSubmitButton}
+              onClick={handleEmailSubmit}
+              disabled={submitting}
+            >
+              Submit & View Results
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

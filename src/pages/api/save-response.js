@@ -46,7 +46,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { surveyData, results, timestamp } = req.body;
+    const { surveyData, results, email, timestamp } = req.body;
 
     if (!surveyData || !results) {
       return res.status(400).json({ message: 'Missing required data' });
@@ -60,6 +60,7 @@ export default async function handler(req, res) {
       id: responseId,
       surveyData,
       results,
+      email: email || null,
       timestamp: timestamp || new Date().toISOString(),
       createdAt: new Date().toISOString()
     };
@@ -73,6 +74,13 @@ export default async function handler(req, res) {
     // Also store in a list for easy retrieval
     await redis.lpush('responses', responseId);
     console.log('Response ID added to list');
+
+    // 이메일 카운트 관리
+    if (!email) {
+      await redis.incr('no_email_count');
+    } else {
+      await redis.incr('with_email_count');
+    }
 
     // When using Unstash:
     // const unstash = new Unstash(process.env.UNSTASH_TOKEN);
