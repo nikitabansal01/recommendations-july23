@@ -57,10 +57,15 @@ export function scoreSymptoms(userResponses: SurveyResponses, cyclePhase: string
     explanations.push('Acne is strongly associated with high androgen levels');
   }
   
-  if (symptoms.includes('Hair loss') || symptoms.includes('Hair thinning')) {
+  if (symptoms.includes('Hair loss/thinning')) {
     scores.androgens += 2;
     scores.thyroid += 1;
-    explanations.push('Hair loss can indicate high androgens or thyroid issues');
+    explanations.push('Hair loss/thinning can indicate high androgens or thyroid issues');
+  }
+  
+  if (symptoms.includes('Hirsutism (excessive facial hair)')) {
+    scores.androgens += 4;
+    explanations.push('Hirsutism is a strong indicator of high androgen levels');
   }
   
   if (symptoms.includes('Bloating')) {

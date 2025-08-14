@@ -31,7 +31,7 @@ const questions: Question[] = [
     id: 'q4_symptoms',
     question: 'Which of the following symptoms do you experience? (Select all that apply)',
     type: 'checkbox',
-    options: ['Acne', 'Hair loss', 'Hair thinning', 'Bloating', 'Breast tenderness', 'None of the above']
+    options: ['Acne', 'Hair loss/thinning', 'Hirsutism (excessive facial hair)', 'Bloating', 'Breast tenderness', 'None of the above']
   },
   {
     id: 'q5_energy',
