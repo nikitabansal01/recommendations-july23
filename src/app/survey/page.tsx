@@ -31,7 +31,7 @@ const questions: Question[] = [
     id: 'q4_symptoms',
     question: 'Which of the following symptoms do you experience? (Select all that apply)',
     type: 'checkbox',
-    options: ['Acne', 'Hair loss', 'Hair thinning', 'Bloating', 'Breast tenderness', 'None of the above']
+    options: ['Acne', 'Hair loss/thinning', 'Hirsutism (excessive facial hair)', 'Bloating', 'Breast tenderness', 'None of the above']
   },
   {
     id: 'q5_energy',
@@ -67,7 +67,7 @@ const questions: Question[] = [
     id: 'q10_conditions',
     question: 'Do you have any of the following conditions? (Select all that apply)',
     type: 'checkbox',
-    options: ['PCOS', 'Endometriosis', 'PMDD', 'Hashimoto\'s', 'None of the above']
+    options: ['PCOS', 'Endometriosis', 'PMDD', 'Hypothyroid', 'None of the above']
   }
 ];
 

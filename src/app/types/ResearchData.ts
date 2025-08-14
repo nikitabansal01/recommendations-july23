@@ -35,7 +35,6 @@ export interface ResearchStudy {
   conditionRelevance: {
     pcos?: number; // 0-10 scale
     pmdd?: number;
-    hashimotos?: number;
     hypothyroidism?: number;
     hyperthyroidism?: number;
   };

@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import RecommendationsClient from './components/RecommendationsClient';
+import RecommendationsWrapper from './RecommendationsWrapper';
 import { getResponseData } from '../lib/data';
 
 export default async function RecommendationsPage({
@@ -21,7 +21,7 @@ export default async function RecommendationsPage({
     // 추천은 클라이언트에서만 fetch (initialRecommendations는 null)
     return (
       <Suspense fallback={<div>Loading...</div>}>
-        <RecommendationsClient 
+        <RecommendationsWrapper 
           initialData={responseData}
           initialRecommendations={null}
         />
