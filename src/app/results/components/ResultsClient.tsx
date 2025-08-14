@@ -321,7 +321,7 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
       <div className={styles.actionGroup}>
         <button 
           className={styles.recommendationsButton}
-          onClick={() => window.open(`/recommendations?responseId=${initialData.id}`, '_blank')}
+          onClick={() => router.push(`/recommendations?responseId=${initialData.id}`)}
         >
           🎯 See Personalized Action Plan
         </button>
