@@ -106,7 +106,7 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
   };
   const getHormoneDescription = (hormone: string) => {
     const descriptions: Record<string, string> = {
-      androgens: 'High androgen levels can cause acne, hair loss/thinning, hirsutism, and irregular periods.',
+      androgens: 'High androgen levels can cause acne, hair loss, and irregular periods.',
       progesterone: 'Low progesterone can cause PMS symptoms, mood swings, and irregular cycles.',
       estrogen: 'Estrogen dominance can cause heavy periods, bloating, and breast tenderness.',
       thyroid: 'Thyroid issues can cause fatigue, weight changes, and mood problems.',

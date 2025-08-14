@@ -5,7 +5,6 @@ import styles from '../Recommendations.module.css';
 import { RecommendationResult, UserProfile } from '../../types/ResearchData';
 import { SurveyResponses } from '../../types/SurveyResponses';
 import { ResultsSummary } from '../../types/ResultsSummary';
-import { useCurrentRecommendations } from '../../lib/current-recommendations-context';
 
 interface RecommendationsClientProps {
   initialData: {
@@ -13,45 +12,22 @@ interface RecommendationsClientProps {
     results: ResultsSummary;
   };
   initialRecommendations?: RecommendationResult | null;
-  chatbotState?: any; // Add chatbot state as prop
-  chatbotDispatch?: any; // Add chatbot dispatch as prop
 }
 
-const RecommendationsClient: React.FC<RecommendationsClientProps> = ({ initialData, initialRecommendations, chatbotState, chatbotDispatch }) => {
+const RecommendationsClient: React.FC<RecommendationsClientProps> = ({ initialData, initialRecommendations }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { updateRecommendations } = useCurrentRecommendations();
   const [surveyData] = useState<SurveyResponses | null>(initialData.surveyData);
   const [results] = useState<ResultsSummary | null>(initialData.results);
   const [loading, setLoading] = useState(!initialRecommendations);
   const [activeTab, setActiveTab] = useState<'food' | 'movement' | 'mindfulness'>('food');
   const [recommendations, setRecommendations] = useState<RecommendationResult | null>(initialRecommendations || null);
-  const chatbotStateData = chatbotState || { recommendationChanges: { shouldRefresh: false, refreshReason: '', alternativePreferences: [] } };
 
   useEffect(() => {
     if (!surveyData || !results) return;
     generateLLMRecommendationsFromSurvey();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [surveyData, results]);
-
-  // Watch for chatbot recommendation refresh requests
-  useEffect(() => {
-    if (chatbotStateData.recommendationChanges.shouldRefresh) {
-      console.log('🔄 Chatbot requested recommendation refresh:', chatbotStateData.recommendationChanges.refreshReason);
-      console.log('📝 Alternative preferences:', chatbotStateData.recommendationChanges.alternativePreferences);
-      
-      // Regenerate recommendations with new preferences
-      generateLLMRecommendationsFromSurvey();
-      
-      // Reset the refresh flag after a delay to ensure recommendations are generated
-      setTimeout(() => {
-        if (chatbotDispatch) {
-          chatbotDispatch({ type: 'RESET_RECOMMENDATION_REFRESH' });
-          console.log('🔄 Reset refresh flag after generating recommendations');
-        }
-      }, 1000);
-    }
-  }, [chatbotStateData.recommendationChanges.shouldRefresh]);
 
   const generateLLMRecommendationsFromSurvey = async () => {
     try {
@@ -60,30 +36,6 @@ const RecommendationsClient: React.FC<RecommendationsClientProps> = ({ initialDa
         router.push('/');
         return;
       }
-      
-      // Check if this is a refresh request from chatbot
-      const isRefreshRequest = chatbotStateData.recommendationChanges.shouldRefresh;
-      const alternativePreferences = chatbotStateData.recommendationChanges.alternativePreferences;
-      
-      console.log('🔄 Refresh request check:', {
-        isRefreshRequest,
-        alternativePreferences,
-        reason: chatbotStateData.recommendationChanges.refreshReason
-      });
-      
-      // Check if user selected a specific category from "Too hard" flow
-      let selectedCategory: ('food' | 'movement' | 'mindfulness') | null = null;
-      if (alternativePreferences && alternativePreferences.length > 0) {
-        const easiestToStart = alternativePreferences.find((pref: string) => pref.startsWith('Easiest to start:'));
-        if (easiestToStart) {
-          const category = easiestToStart.split(': ')[1];
-          if (category === 'food') selectedCategory = 'food';
-          else if (category === 'move') selectedCategory = 'movement';
-          else if (category === 'emotions') selectedCategory = 'mindfulness';
-          console.log('🎯 User selected category from Too Hard flow:', selectedCategory);
-        }
-      }
-      
       const userProfile: UserProfile = {
         hormoneScores: results.analysis?.scores || {
           androgens: 0, progesterone: 0, estrogen: 0, thyroid: 0, cortisol: 0, insulin: 0
@@ -99,61 +51,22 @@ const RecommendationsClient: React.FC<RecommendationsClientProps> = ({ initialDa
         cravings: surveyData.q7_cravings || [],
         confidence: results.confidenceLevel || 'low'
       };
-      
-      // If user selected a specific category from "Too hard" flow, only generate recommendations for that category
-      const categories: ('food' | 'movement' | 'mindfulness')[] = selectedCategory ? [selectedCategory] : ['food', 'movement', 'mindfulness'];
+      const categories: ('food' | 'movement' | 'mindfulness')[] = ['food', 'movement', 'mindfulness'];
       const recResult: RecommendationResult = {
         food: [], movement: [], mindfulness: [], userProfile, generatedAt: new Date().toISOString()
       };
-      
       let minConfidence = 100;
       for (const category of categories) {
-        const requestBody = { 
-          userProfile, 
-          category,
-          // Add alternative preferences if this is a refresh request
-          alternativePreferences: isRefreshRequest ? alternativePreferences : undefined
-        };
-        
-        console.log(`📡 API call for ${category}:`, requestBody);
-        
         const res = await fetch('/api/llm-recommendations', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(requestBody)
+          body: JSON.stringify({ userProfile, category })
         });
         const data = await res.json();
         if (data.recommendations) recResult[category] = data.recommendations;
         if (typeof data.confidence === 'number') minConfidence = Math.min(minConfidence, data.confidence);
       }
-      
-      // If user selected a specific category, clear other categories
-      if (selectedCategory) {
-        if (selectedCategory !== 'food') recResult.food = [];
-        if (selectedCategory !== 'movement') recResult.movement = [];
-        if (selectedCategory !== 'mindfulness') recResult.mindfulness = [];
-        console.log(`🎯 Showing only ${selectedCategory} recommendations as requested by user`);
-      }
-      
       setRecommendations(recResult);
-      
-      // Update the context so chatbot knows about new recommendations
-      const allRecommendations = [
-        ...recResult.food.map(rec => ({ ...rec, category: 'food' })),
-        ...recResult.movement.map(rec => ({ ...rec, category: 'movement' })),
-        ...recResult.mindfulness.map(rec => ({ ...rec, category: 'mindfulness' }))
-      ];
-      updateRecommendations(allRecommendations);
-      console.log('🔄 Updated chatbot context with new recommendations:', allRecommendations);
-      
-      // Show a success message if this was a refresh
-      if (isRefreshRequest) {
-        console.log('✅ Recommendations refreshed based on chatbot feedback!');
-        // Reset the refresh flag after successful refresh
-        // Note: In a real app, you'd dispatch an action to reset this
-        // For now, we'll handle this in the useEffect
-      }
-      
     } finally {
       setLoading(false);
     }
@@ -196,23 +109,15 @@ const RecommendationsClient: React.FC<RecommendationsClientProps> = ({ initialDa
     );
   }
 
-    return (
+  return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Your Personalized Action Plan</h1>
         <p className={styles.subtitle}>
           Based on your hormone health assessment, here are specific actions backed by research
         </p>
-        {chatbotStateData.recommendationChanges.shouldRefresh && (
-          <div className={styles.refreshNotice}>
-            🔄 Recommendations refreshed based on your feedback: "{chatbotStateData.recommendationChanges.refreshReason}"
-          </div>
-        )}
       </div>
-
-
-        
-                <div className={styles.tabs}>
+      <div className={styles.tabs}>
         <button
           className={`${styles.tab} ${activeTab === 'food' ? styles.active : ''}`}
           onClick={() => setActiveTab('food')}
@@ -232,18 +137,6 @@ const RecommendationsClient: React.FC<RecommendationsClientProps> = ({ initialDa
           🧘‍♀️ Pause
         </button>
       </div>
-      
-      {/* Personalization Notice */}
-      {chatbotStateData.recommendationChanges.shouldRefresh && (
-        <div className={styles.personalizationNotice}>
-          <div className={styles.personalizationIcon}>🎯</div>
-          <div className={styles.personalizationText}>
-            <strong>Personalizing recommendations...</strong>
-            <p>Generating new suggestions based on your preferences: {chatbotStateData.recommendationChanges.alternativePreferences.join(', ')}</p>
-          </div>
-        </div>
-      )}
-        
       <div className={styles.content}>
         <div className={styles.recommendationsList}>
           {recommendations[activeTab].map((recommendation, index) => (
@@ -329,7 +222,6 @@ const RecommendationsClient: React.FC<RecommendationsClientProps> = ({ initialDa
           ))}
         </div>
       </div>
-      
       <div className={styles.actions}>
         <button onClick={() => router.push('/results')} className={styles.backButton}>
           ← Back to Results
@@ -338,7 +230,6 @@ const RecommendationsClient: React.FC<RecommendationsClientProps> = ({ initialDa
           🔁 Start Over
         </button>
       </div>
-      
       <div className={styles.disclaimer}>
         <p>
           <strong>Medical Disclaimer:</strong> These recommendations are based on research studies 

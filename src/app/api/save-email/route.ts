@@ -1,10 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getGlobalStorage, EmailData } from '../../lib/local-storage';
+import { Redis } from '@upstash/redis';
 
-// Use global storage instance
-const storage = getGlobalStorage();
+// Initialize Upstash Redis client with error handling
+let redis: Redis | null = null;
+
+try {
+  redis = new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL!,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+  });
+} catch (error) {
+  console.error('Failed to initialize Redis client:', error);
+}
 
 export async function POST(request: NextRequest) {
+  // Check if Redis is available
+  if (!redis) {
+    return NextResponse.json({ 
+      success: false, 
+      message: 'Database connection not available. Please check environment variables.' 
+    }, { status: 500 });
+  }
+
   try {
     const { email, responseId, timestamp } = await request.json();
 
@@ -22,7 +39,7 @@ export async function POST(request: NextRequest) {
     const emailId = `email_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     // Save the email data
-    const emailData: EmailData = {
+    const emailData = {
       id: emailId,
       email,
       responseId: responseId || null,
@@ -30,23 +47,21 @@ export async function POST(request: NextRequest) {
       createdAt: new Date().toISOString()
     };
 
-    // Console logging for local development
-    console.log('=== LOCAL DEVELOPMENT: SAVING EMAIL ===');
-    console.log('Email ID:', emailId);
-    console.log('Email:', email);
-    console.log('Response ID:', responseId);
-    console.log('Timestamp:', emailData.timestamp);
-    console.log('=======================================');
-
-    // Store in local storage
-    storage.saveEmail(emailData);
+    // Store in Upstash Redis
+    await redis.set(emailId, emailData);
     
-    console.log(`Email saved locally. Total emails: ${storage.getEmailCount()}`);
+    // Also store in a list for easy retrieval
+    await redis.lpush('emails', emailId);
+
+    // If there's a responseId, link the email to the response
+    if (responseId) {
+      await redis.hset(`response_emails:${responseId}`, { email });
+    }
 
     return NextResponse.json({ 
       success: true, 
       emailId,
-      message: 'Email saved successfully (local development mode)' 
+      message: 'Email saved successfully' 
     });
 
   } catch (error) {
@@ -54,7 +69,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ 
       success: false, 
       message: 'Failed to save email',
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.message : 'Unknown error') : 'Internal server error'
     }, { status: 500 });
   }
 } 

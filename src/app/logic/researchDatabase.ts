@@ -177,14 +177,14 @@ export const researchDatabase: ResearchStudy[] = [
     birthControlRelevance: { none: 8, onOcp: 6 }
   },
 
-  // Hypothyroid & Meditation Studies
+  // Hashimoto's & Meditation Studies
   {
-    id: 'hypothyroid_meditation_2023',
-    title: 'Mindfulness Meditation Improves Thyroid Function in Women with Hypothyroidism',
+    id: 'hashimotos_meditation_2023',
+    title: 'Mindfulness Meditation Improves Thyroid Function in Women with Hashimoto\'s Thyroiditis',
     authors: ['Rodriguez M', 'Gonzalez P', 'Hernandez L'],
     publicationYear: 2023,
-    journal: 'Thyroid Research',
-    doi: '10.1000/thyroid.2023.008',
+    journal: 'Autoimmune Research',
+    doi: '10.1000/auto.2023.008',
     citationCount: 26,
     studyType: 'human',
     participantCount: 80,
@@ -193,10 +193,10 @@ export const researchDatabase: ResearchStudy[] = [
     riskBiasScore: 4,
     interventionType: 'mindfulness',
     specificIntervention: '15-minute daily meditation for 12 weeks',
-    outcomes: ['Thyroid function improvement', 'TSH improvement', 'Quality of life'],
-    results: 'Improved thyroid function and TSH levels',
+    outcomes: ['Thyroid antibodies reduction', 'TSH improvement', 'Quality of life'],
+    results: '20% reduction in thyroid antibodies and improved TSH levels',
     hormoneRelevance: { thyroid: 9, cortisol: 7 },
-    conditionRelevance: { hypothyroidism: 9 },
+    conditionRelevance: { hashimotos: 9 },
     symptomRelevance: { fatigue: 8, moodChanges: 6 },
     cyclePhaseRelevance: { follicular: 6, luteal: 6 },
     birthControlRelevance: { none: 7, onOcp: 6 }
