@@ -6,8 +6,13 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Hormone Health Assessment',
+  title: 'Auvra - Decode Your Hormones',
   description: 'Personalized hormone health assessment and recommendations',
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/Logo.png',
+  },
 }
 
 export default function RootLayout({
