@@ -50,16 +50,21 @@ export async function POST(request: NextRequest) {
     if (redis) {
       // Save to Redis
       console.log('Saving feedback to Redis:', feedbackData);
+      console.log('Feedback key:', `feedback:${feedbackData.id}`);
       await redis.set(`feedback:${feedbackData.id}`, JSON.stringify(feedbackData));
       console.log('Feedback saved to Redis successfully');
       
+      // Verify it was saved
+      const savedFeedback = await redis.get(`feedback:${feedbackData.id}`);
+      console.log('Verification - saved feedback:', savedFeedback);
+      
       // Also update the original response with feedback reference
-      const existingResponse = await redis.get(`response:${responseId}`);
+      const existingResponse = await redis.get(responseId);
       if (existingResponse) {
         const responseData = JSON.parse(existingResponse as string);
         responseData.feedbackId = feedbackData.id;
         responseData.feedbackSubmitted = true;
-        await redis.set(`response:${responseId}`, JSON.stringify(responseData));
+        await redis.set(responseId, JSON.stringify(responseData));
         console.log('Updated original response with feedback reference');
       } else {
         console.log('Original response not found for feedback reference update');
