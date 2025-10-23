@@ -10,37 +10,37 @@ interface FeedbackPopupProps {
 }
 
 export interface FeedbackData {
-  rating: number;
-  comments: string;
-  experience: string;
-  improvements: string;
+  understanding: string;        // Yes, Kind of, Not really
+  helpfulPart: string;          // What part felt most helpful
+  unclearPart: string;          // What was unclear/confusing
+  wouldShare: string;           // Yes, Maybe, No
 }
 
 const FeedbackPopup: React.FC<FeedbackPopupProps> = ({ isOpen, onClose, onSubmit, submitting }) => {
-  const [rating, setRating] = useState(0);
-  const [comments, setComments] = useState('');
-  const [experience, setExperience] = useState('');
-  const [improvements, setImprovements] = useState('');
+  const [understanding, setUnderstanding] = useState('');
+  const [helpfulPart, setHelpfulPart] = useState('');
+  const [unclearPart, setUnclearPart] = useState('');
+  const [wouldShare, setWouldShare] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (rating === 0) {
-      alert('Please select a rating');
+    if (!understanding) {
+      alert('Please answer the first question');
       return;
     }
     onSubmit({
-      rating,
-      comments,
-      experience,
-      improvements
+      understanding,
+      helpfulPart,
+      unclearPart,
+      wouldShare
     });
   };
 
   const handleClose = () => {
-    setRating(0);
-    setComments('');
-    setExperience('');
-    setImprovements('');
+    setUnderstanding('');
+    setHelpfulPart('');
+    setUnclearPart('');
+    setWouldShare('');
     onClose();
   };
 
@@ -59,59 +59,70 @@ const FeedbackPopup: React.FC<FeedbackPopupProps> = ({ isOpen, onClose, onSubmit
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.field}>
             <label className={styles.label}>
-              How would you rate your overall experience? *
+              Did this help you understand what might be going on in your body? *
             </label>
-            <div className={styles.ratingContainer}>
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  key={star}
-                  type="button"
-                  className={`${styles.star} ${star <= rating ? styles.starActive : ''}`}
-                  onClick={() => setRating(star)}
-                >
-                  ⭐
-                </button>
+            <div className={styles.radioGroup}>
+              {['Yes', 'Kind of', 'Not really'].map((option) => (
+                <label key={option} className={styles.radioOption}>
+                  <input
+                    type="radio"
+                    name="understanding"
+                    value={option}
+                    checked={understanding === option}
+                    onChange={(e) => setUnderstanding(e.target.value)}
+                    className={styles.radioInput}
+                  />
+                  <span className={styles.radioLabel}>{option}</span>
+                </label>
               ))}
             </div>
           </div>
 
           <div className={styles.field}>
             <label className={styles.label}>
-              What was your overall experience with the assessment?
+              What part felt most helpful or accurate? (Optional)
             </label>
             <textarea
-              value={experience}
-              onChange={(e) => setExperience(e.target.value)}
+              value={helpfulPart}
+              onChange={(e) => setHelpfulPart(e.target.value)}
               className={styles.textarea}
-              placeholder="Tell us about your experience..."
+              placeholder="Something that stood out, felt true, or made you think…"
               rows={3}
             />
           </div>
 
           <div className={styles.field}>
             <label className={styles.label}>
-              Any specific comments or suggestions?
+              Was anything unclear, confusing, or hard to trust? (Optional)
             </label>
             <textarea
-              value={comments}
-              onChange={(e) => setComments(e.target.value)}
+              value={unclearPart}
+              onChange={(e) => setUnclearPart(e.target.value)}
               className={styles.textarea}
-              placeholder="Share your thoughts..."
+              placeholder="We want to earn your trust — what didn't sit right?"
               rows={3}
             />
           </div>
 
           <div className={styles.field}>
             <label className={styles.label}>
-              What could we improve?
+              Would you share this with a friend going through something similar?
             </label>
-            <textarea
-              value={improvements}
-              onChange={(e) => setImprovements(e.target.value)}
-              className={styles.textarea}
-              placeholder="Help us make it better..."
-              rows={3}
-            />
+            <div className={styles.radioGroup}>
+              {['Yes', 'Maybe', 'No'].map((option) => (
+                <label key={option} className={styles.radioOption}>
+                  <input
+                    type="radio"
+                    name="wouldShare"
+                    value={option}
+                    checked={wouldShare === option}
+                    onChange={(e) => setWouldShare(e.target.value)}
+                    className={styles.radioInput}
+                  />
+                  <span className={styles.radioLabel}>{option}</span>
+                </label>
+              ))}
+            </div>
           </div>
 
           <div className={styles.actions}>
@@ -126,7 +137,7 @@ const FeedbackPopup: React.FC<FeedbackPopupProps> = ({ isOpen, onClose, onSubmit
             <button
               type="submit"
               className={styles.submitButton}
-              disabled={submitting || rating === 0}
+              disabled={submitting || !understanding}
             >
               {submitting ? 'Submitting...' : 'Submit Feedback'}
             </button>
