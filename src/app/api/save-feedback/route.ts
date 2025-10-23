@@ -29,9 +29,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate feedback data
-    if (!feedback.rating || feedback.rating < 1 || feedback.rating > 5) {
+    if (!feedback.understanding) {
       return NextResponse.json(
-        { error: 'Invalid rating' },
+        { error: 'Understanding field is required' },
         { status: 400 }
       );
     }
@@ -39,10 +39,10 @@ export async function POST(request: NextRequest) {
     const feedbackData = {
       id: `feedback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       responseId,
-      rating: feedback.rating,
-      comments: feedback.comments || '',
-      experience: feedback.experience || '',
-      improvements: feedback.improvements || '',
+      understanding: feedback.understanding,
+      helpfulPart: feedback.helpfulPart || '',
+      unclearPart: feedback.unclearPart || '',
+      wouldShare: feedback.wouldShare || '',
       timestamp: new Date().toISOString(),
       createdAt: new Date().toISOString()
     };

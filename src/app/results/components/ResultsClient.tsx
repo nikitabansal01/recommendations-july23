@@ -46,22 +46,6 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
   const handleFeedbackSubmit = async (feedback: FeedbackData) => {
     setFeedbackSubmitting(true);
     try {
-      // For local testing, save to localStorage
-      if (initialData.id.startsWith('mock_')) {
-        const feedbackData = {
-          id: `feedback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-          responseId: initialData.id,
-          ...feedback,
-          timestamp: new Date().toISOString(),
-          createdAt: new Date().toISOString()
-        };
-        
-        localStorage.setItem(feedbackData.id, JSON.stringify(feedbackData));
-        setFeedbackPopupOpen(false);
-        alert('Thank you for your feedback! (Saved locally for testing)');
-        return;
-      }
-
       const response = await fetch('/api/save-feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -75,7 +59,9 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
         setFeedbackPopupOpen(false);
         alert('Thank you for your feedback!');
       } else {
-        throw new Error('Failed to save feedback');
+        const errorData = await response.json();
+        console.error('API Error:', errorData);
+        throw new Error(errorData.error || 'Failed to save feedback');
       }
     } catch (error) {
       console.error('Error saving feedback:', error);
