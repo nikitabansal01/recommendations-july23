@@ -306,28 +306,16 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
           </div>
         </div>
       </div>
-      <div className={styles.actionGroup}>
-        <button 
-          className={styles.recommendationsButton}
-          onClick={() => window.open(`/recommendations?responseId=${initialData.id}`, '_blank')}
-        >
-          🎯 See Personalized Action Plan
-        </button>
-        <button className={styles.downloadButton} onClick={handleDownloadPDF}>
-          📄 Download My Hormone Report (PDF)
-        </button>
-        <button className={styles.restartButton} onClick={() => router.push('/survey')}>
-          🔁 Start Over
-        </button>
-        {process.env.NODE_ENV === 'development' && (
+      {process.env.NODE_ENV === 'development' && (
+        <div className={styles.actionGroup}>
           <button 
             className={styles.adminButton}
             onClick={() => router.push('/admin-dashboard')}
           >
             🔬 Medical Expert Dashboard
           </button>
-        )}
-      </div>
+        </div>
+      )}
       <div className={styles.disclaimer}>
         This analysis is for informational purposes only and should not replace professional medical advice. 
         Always consult with a qualified healthcare provider for diagnosis and treatment.
