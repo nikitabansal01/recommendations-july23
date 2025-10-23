@@ -186,27 +186,6 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
     };
     return phaseInfo[phase as keyof typeof phaseInfo] || phaseInfo.unknown;
   };
-  const categorizeExplanations = (explanations: string[]) => {
-    const categories = {
-      symptoms: [] as string[],
-      labs: [] as string[],
-      conflicts: [] as string[],
-      general: [] as string[]
-    };
-    const explanationsArray = Array.isArray(explanations) ? explanations : [];
-    explanationsArray.forEach(explanation => {
-      if (explanation.includes('lab') || explanation.includes('Lab') || explanation.includes('added +2')) {
-        categories.labs.push(explanation);
-      } else if (explanation.includes('conflict') || explanation.includes('low labs') || explanation.includes('despite')) {
-        categories.conflicts.push(explanation);
-      } else if (explanation.includes('symptom') || explanation.includes('indicate') || explanation.includes('suggest')) {
-        categories.symptoms.push(explanation);
-      } else {
-        categories.general.push(explanation);
-      }
-    });
-    return categories;
-  };
 
   // Loading
   if (!result || !result.analysis?.primaryImbalance) {
@@ -231,7 +210,6 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
 
   const confidenceInfo = getConfidenceDisplay(result?.confidenceLevel || result?.analysis?.confidenceLevel || 'low');
   const cyclePhaseInfo = getCyclePhaseDisplay(result?.cyclePhase || result?.analysis?.cyclePhase || '');
-  const categorizedExplanations = categorizeExplanations(result?.analysis?.explanations || []);
 
   return (
     <div className={styles.container}>
@@ -254,45 +232,6 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
       </div>
       <div ref={reportRef} className={styles.reportContent}>
         <div className={styles.resultsContainer}>
-          <div className={styles.explanationsSection}>
-            <h2 className={styles.resultTitle}>Analysis Details</h2>
-            {categorizedExplanations.symptoms.length > 0 && (
-              <div className={styles.explanationCategory}>
-                <h3 className={styles.explanationTitle}>📋 Symptom Analysis</h3>
-                <ul className={styles.explanationList}>
-                  {categorizedExplanations.symptoms.map((explanation: string, index: number) => (
-                    <li key={index} className={styles.explanationItem}>
-                      {explanation}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {categorizedExplanations.labs.length > 0 && (
-              <div className={styles.explanationCategory}>
-                <h3 className={styles.explanationTitle}>🧪 Lab Results Analysis</h3>
-                <ul className={styles.explanationList}>
-                  {categorizedExplanations.labs.map((explanation: string, index: number) => (
-                    <li key={index} className={styles.explanationItem}>
-                      {explanation}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {categorizedExplanations.general.length > 0 && (
-              <div className={styles.explanationCategory}>
-                <h3 className={styles.explanationTitle}>ℹ️ Additional Information</h3>
-                <ul className={styles.explanationList}>
-                  {categorizedExplanations.general.map((explanation: string, index: number) => (
-                    <li key={index} className={styles.explanationItem}>
-                      {explanation}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
           <div className={styles.primaryResult}>
             <h2 className={styles.resultTitle}>Primary Hormone Issue</h2>
             <div className={styles.hormoneCard}>
