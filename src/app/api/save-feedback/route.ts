@@ -58,17 +58,29 @@ export async function POST(request: NextRequest) {
       const savedFeedback = await redis.get(`feedback:${feedbackData.id}`);
       console.log('Verification - saved feedback:', savedFeedback);
       
-      // Also update the original response with feedback reference
+      // Also update the original response with full feedback data
       const existingResponse = await redis.get(responseId);
       if (existingResponse) {
         // existingResponse is already an object, no need to parse
         const responseData = typeof existingResponse === 'string' 
           ? JSON.parse(existingResponse) 
           : existingResponse;
+        
+        // Add full feedback data to the response
+        responseData.feedback = {
+          id: feedbackData.id,
+          understanding: feedbackData.understanding,
+          helpfulPart: feedbackData.helpfulPart,
+          unclearPart: feedbackData.unclearPart,
+          wouldShare: feedbackData.wouldShare,
+          timestamp: feedbackData.timestamp,
+          createdAt: feedbackData.createdAt
+        };
         responseData.feedbackId = feedbackData.id;
         responseData.feedbackSubmitted = true;
+        
         await redis.set(responseId, JSON.stringify(responseData));
-        console.log('Updated original response with feedback reference');
+        console.log('Updated original response with full feedback data');
       } else {
         console.log('Original response not found for feedback reference update');
       }
