@@ -19,7 +19,7 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
       id: 'action-plan',
       title: 'See your personalized action plan',
       description: '3-month overview of what your body needs',
-      buttonText: 'View Action Plan',
+      buttonText: '🎯 View Action Plan',
       buttonAction: () => window.open(`/recommendations?responseId=${responseId}`, '_blank'),
       completed: false
     },
@@ -27,7 +27,7 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
       id: 'lab-results',
       title: 'Start again with recent lab values',
       description: 'Upload labs for higher accuracy and faster results',
-      buttonText: 'Retake with Lab Results',
+      buttonText: '🔄 Retake with Lab Results',
       buttonAction: () => router.push('/survey'),
       completed: hasLabResults
     },
@@ -35,7 +35,7 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
       id: 'mobile-app',
       title: 'Sign up for early access to Auvra mobile app',
       description: 'Get daily support when we launch',
-      buttonText: 'Join Waitlist',
+      buttonText: '🚀 Join Waitlist',
       buttonAction: () => window.open('https://forms.fillout.com/t/x8xyYYpek3us', '_blank'),
       completed: false
     }
