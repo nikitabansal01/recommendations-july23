@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Redis } from '@upstash/redis';
-import { generateDualTimestamps } from '../../lib/timestampUtils';
 
 // Initialize Upstash Redis client with error handling
 let redis: Redis | null = null;
@@ -40,13 +39,12 @@ export async function POST(request: NextRequest) {
     const emailId = `email_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     // Save the email data
-    const timestamps = generateDualTimestamps();
     const emailData = {
       id: emailId,
       email,
       responseId: responseId || null,
-      timestamp: timestamp || timestamps.timestamp, // Use provided timestamp or generate new one
-      ...timestamps
+      timestamp: timestamp || new Date().toISOString(),
+      createdAt: new Date().toISOString()
     };
 
     // Store in Upstash Redis
