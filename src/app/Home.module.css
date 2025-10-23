@@ -1,9 +1,10 @@
 .container {
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 90px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  padding-top: 0;
   position: relative;
 }
 
