@@ -1,22 +1,26 @@
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './NextStepsCard.module.css';
 
 interface NextStepsCardProps {
   hasLabResults?: boolean;
   hasDownloadedReport?: boolean;
+  responseId?: string;
 }
 
 const NextStepsCard: React.FC<NextStepsCardProps> = ({ 
   hasLabResults = false, 
-  hasDownloadedReport = false 
+  hasDownloadedReport = false,
+  responseId = ''
 }) => {
+  const router = useRouter();
   const steps = [
     {
       id: 'action-plan',
       title: 'See your personalized action plan',
       description: '3-month overview of what your body needs',
       buttonText: 'View Action Plan',
-      buttonAction: () => console.log('View action plan clicked'),
+      buttonAction: () => window.open(`/recommendations?responseId=${responseId}`, '_blank'),
       completed: false
     },
     {
@@ -24,7 +28,7 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
       title: 'Start again with recent lab values',
       description: 'Upload labs for higher accuracy and faster results',
       buttonText: 'Retake with Lab Results',
-      buttonAction: () => window.location.href = '/',
+      buttonAction: () => router.push('/survey'),
       completed: hasLabResults
     },
     {

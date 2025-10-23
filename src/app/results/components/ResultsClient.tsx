@@ -298,6 +298,7 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
             <NextStepsCard 
               hasLabResults={!!initialData.surveyData.q11_labs && Object.values(initialData.surveyData.q11_labs).some(value => value && value.trim() !== '')}
               hasDownloadedReport={false}
+              responseId={initialData.id}
             />
             
             {/* Stay Connected Card */}
