@@ -69,8 +69,6 @@
   padding: 16px 32px;
   border-radius: 25px;
   border: none;
-  background: #C17EC9;
-  color: white;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
@@ -79,13 +77,46 @@
   width: 100%;
   max-width: 300px;
   text-align: center;
+}
+
+/* Primary button - solid purple (like "See Personalized Action Plan") */
+.primaryButton {
+  background: #C17EC9;
+  color: white;
   box-shadow: 0 4px 15px rgba(193, 126, 201, 0.3);
 }
 
-.stepButton:hover {
+.primaryButton:hover {
   background: #A86BB4;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(193, 126, 201, 0.4);
+}
+
+/* Secondary button - whitish (like "Download My Hormone Report") */
+.secondaryButton {
+  background: #fff;
+  color: #C17EC9;
+  border: 2px solid #C17EC9;
+  box-shadow: 0 4px 15px rgba(193, 126, 201, 0.2);
+}
+
+.secondaryButton:hover {
+  background: rgba(193, 126, 201, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(193, 126, 201, 0.3);
+}
+
+/* Tertiary button - light purple (like "Start Over") */
+.tertiaryButton {
+  background: #F7D1E0;
+  color: #C17EC9;
+  box-shadow: 0 4px 15px rgba(193, 126, 201, 0.2);
+}
+
+.tertiaryButton:hover {
+  background: rgba(247, 209, 224, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(193, 126, 201, 0.3);
 }
 
 .stepButton.completed {

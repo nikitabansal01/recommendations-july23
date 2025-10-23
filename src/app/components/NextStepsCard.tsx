@@ -21,7 +21,8 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
       description: '3-month overview of what your body needs',
       buttonText: '🎯 View Action Plan',
       buttonAction: () => window.open(`/recommendations?responseId=${responseId}`, '_blank'),
-      completed: false
+      completed: false,
+      type: 'primary'
     },
     {
       id: 'lab-results',
@@ -29,7 +30,8 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
       description: 'Upload labs for higher accuracy and faster results',
       buttonText: '🔄 Retake with Lab Results',
       buttonAction: () => router.push('/survey'),
-      completed: hasLabResults
+      completed: hasLabResults,
+      type: 'secondary'
     },
     {
       id: 'mobile-app',
@@ -37,7 +39,8 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
       description: 'Get daily support when we launch',
       buttonText: '🚀 Join Waitlist',
       buttonAction: () => window.open('https://forms.fillout.com/t/x8xyYYpek3us', '_blank'),
-      completed: false
+      completed: false,
+      type: 'tertiary'
     }
   ];
 
@@ -45,7 +48,6 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
     <div className={styles.card}>
       {/* Header */}
       <div className={styles.header}>
-        <span className={styles.headerIcon}>🧭</span>
         <h2 className={styles.title}>Next Steps</h2>
       </div>
 
@@ -61,7 +63,7 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
             
             {/* Action Button */}
             <button 
-              className={`${styles.stepButton} ${step.completed ? styles.completed : ''}`}
+              className={`${styles.stepButton} ${styles[step.type + 'Button']} ${step.completed ? styles.completed : ''}`}
               onClick={step.buttonAction}
             >
               {step.buttonText}
