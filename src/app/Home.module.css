@@ -1,10 +1,9 @@
 .container {
-  min-height: calc(100vh - 100px);
+  min-height: calc(100vh - 60px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: linear-gradient(135deg, #A29AEA 0%, #C17EC9 25%, #D482B9 50%, #E98BAC 75%, #FDC6D1 100%);
   position: relative;
 }
 

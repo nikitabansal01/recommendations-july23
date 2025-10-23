@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #A29AEA 0%, #764ba2 100%);
   padding: 20px;
 }
 
@@ -50,7 +50,7 @@
 
 .tab.active {
   background: white;
-  color: #667eea;
+  color: #A29AEA;
   border-color: white;
   box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
 }
@@ -71,7 +71,7 @@
   border-radius: 15px;
   padding: 25px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #A29AEA;
 }
 
 .recommendationHeader {
@@ -186,7 +186,7 @@
   padding: 15px;
   background: #f8f9fa;
   border-radius: 8px;
-  border-left: 3px solid #667eea;
+  border-left: 3px solid #A29AEA;
 }
 
 .researchBacking h4 {
@@ -209,7 +209,7 @@
 
 .studyDetails summary {
   cursor: pointer;
-  color: #667eea;
+  color: #A29AEA;
   font-weight: 600;
   font-size: 0.9rem;
   padding: 8px 0;

@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #A29AEA 0%, #764ba2 100%);
   padding: 20px;
 }
 
@@ -129,7 +129,7 @@
 }
 
 .hormoneCard:hover {
-  border-color: #667eea;
+  border-color: #A29AEA;
   box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
 }
 
@@ -188,7 +188,7 @@
   padding: 8px 12px;
   background: #f7fafc;
   border-radius: 8px;
-  border-left: 3px solid #667eea;
+  border-left: 3px solid #A29AEA;
 }
 
 .scoreLabel {
@@ -245,7 +245,7 @@
   content: '•';
   position: absolute;
   left: 0;
-  color: #667eea;
+  color: #A29AEA;
   font-weight: bold;
   font-size: 1.2rem;
   top: 12px;
@@ -268,7 +268,7 @@
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 20px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #A29AEA;
   color: #2d3748;
   font-size: 1rem;
 }
@@ -355,7 +355,7 @@
 
 .emailInput:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #A29AEA;
 }
 
 .emailActions {
@@ -366,7 +366,7 @@
 }
 
 .sendEmailButton {
-  background: #667eea;
+  background: #A29AEA;
   color: white;
   border: none;
   border-radius: 25px;
@@ -515,7 +515,7 @@
 
 .actionButton {
   background: white;
-  color: #667eea;
+  color: #A29AEA;
   border: none;
   border-radius: 50px;
   padding: 16px 40px;
@@ -692,13 +692,13 @@
 
 .emailInput:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #A29AEA;
 }
 
 .emailSubmitButton {
   width: 100%;
   padding: 14px 0;
-  background: #667eea;
+  background: #A29AEA;
   color: #fff;
   border: none;
   border-radius: 10px;

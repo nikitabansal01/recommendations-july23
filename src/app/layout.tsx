@@ -22,53 +22,66 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        {/* White header with logo and beta version */}
+      <body className={inter.className} style={{
+        background: 'linear-gradient(135deg, #A29AEA 0%, #C17EC9 25%, #D482B9 50%, #E98BAC 75%, #FDC6D1 100%)',
+        minHeight: '100vh'
+      }}>
+        {/* Glassmorphism header with logo and beta version */}
         <div style={{
           position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '100px',
-          background: 'white',
-          borderBottom: '1px solid #e2e8f0',
+          top: '10px',
+          left: '15px',
+          right: '15px',
+          height: '60px',
+          background: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
           zIndex: 1000,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          alignContent: 'center',
           paddingLeft: '20px',
           paddingRight: '20px',
-          boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
+          paddingTop: '8px',
+          paddingBottom: '8px',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+          borderRadius: '20px'
         }}>
           <div style={{
-            background: 'white',
-            borderRadius: '8px',
-            padding: '6px',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-            border: '1px solid #e2e8f0'
+            padding: '8px', display: 'flex'
           }}>
             <Image
               src="/Auvra_Final_Logo 2.png"
               alt="Auvra Logo"
               width={200}
-              height={80}
-              style={{ objectFit: 'contain' }}
+              height={45}
+              style={{ 
+                width: 'auto', 
+                height: '45px', 
+                objectFit: 'contain',
+                maxWidth: '100%'
+              }}
             />
           </div>
           <div style={{
-            background: 'rgba(162, 154, 234, 0.1)',
+            background: 'rgba(255, 255, 255, 0.2)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
             color: '#2d3748',
-            padding: '6px 12px',
-            borderRadius: '20px',
+            padding: '8px 16px',
+            borderRadius: '25px',
             fontSize: '0.8rem',
             fontWeight: '600',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.3)'
           }}>
             🚧 Beta Version
           </div>
         </div>
         {/* Add top padding to account for fixed header */}
-        <div style={{ paddingTop: '100px' }}>
+        <div style={{ paddingTop: '90px' }}>
           {children}
         </div>
       </body>

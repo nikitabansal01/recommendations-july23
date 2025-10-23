@@ -88,7 +88,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 22px 28px;
+  padding: 6px 28px;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   background: white;
@@ -100,7 +100,7 @@
 
 .radioOption:hover,
 .checkboxOption:hover {
-  border-color: #667eea;
+  border-color: #A29AEA;
   background: #f7fafc;
 }
 
@@ -108,7 +108,7 @@
 .checkboxOption input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: #667eea;
+  accent-color: #8B7ED8;
   cursor: pointer;
 }
 
@@ -138,7 +138,7 @@
 
 .dateInput:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #A29AEA;
 }
 
 .dateInput:disabled {
@@ -166,7 +166,7 @@
 
 .numberInput:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #A29AEA;
 }
 
 .helperText {
@@ -208,7 +208,7 @@
 
 .navButton.primary {
   background: white;
-  color: #667eea;
+  color: #A29AEA;
 }
 
 .navButton.primary:hover:not(:disabled) {
@@ -286,7 +286,7 @@
 
 .labInput input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #A29AEA;
 }
 
 .labInput input::placeholder {
@@ -298,7 +298,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 20px;
+  padding: 6px 20px;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   background: white;
@@ -309,14 +309,14 @@
 }
 
 .checkboxOption:hover {
-  border-color: #667eea;
+  border-color: #A29AEA;
   background: #f7fafc;
 }
 
 .checkboxOption input[type="checkbox"] {
   width: 20px;
   height: 20px;
-  accent-color: #667eea;
+  accent-color: #8B7ED8;
   cursor: pointer;
 }
 
@@ -417,13 +417,13 @@
 
 .emailInput:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #A29AEA;
 }
 
 .emailSubmitButton {
   width: 100%;
   padding: 14px 0;
-  background: #667eea;
+  background: #A29AEA;
   color: #fff;
   border: none;
   border-radius: 10px;
