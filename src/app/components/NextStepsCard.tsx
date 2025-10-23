@@ -33,10 +33,10 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
     },
     {
       id: 'mobile-app',
-      title: 'Sign up for early access to our app',
+      title: 'Sign up for early access to Auvra mobile app',
       description: 'Get daily support when we launch',
       buttonText: 'Join Waitlist',
-      buttonAction: () => console.log('Join waitlist clicked'),
+      buttonAction: () => window.open('https://forms.fillout.com/t/x8xyYYpek3us', '_blank'),
       completed: false
     }
   ];
