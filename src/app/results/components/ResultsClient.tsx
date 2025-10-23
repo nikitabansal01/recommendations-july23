@@ -61,7 +61,17 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
       } else {
         const errorData = await response.json();
         console.error('API Error:', errorData);
-        throw new Error(errorData.error || 'Failed to save feedback');
+        
+        // Show detailed error message
+        let errorMessage = 'Failed to save feedback.';
+        if (errorData.error) {
+          errorMessage = errorData.error;
+        }
+        if (errorData.debug) {
+          errorMessage += ` (Debug: Redis available: ${errorData.debug.redisAvailable}, URL set: ${errorData.debug.environmentVariables?.urlSet}, Token set: ${errorData.debug.environmentVariables?.tokenSet})`;
+        }
+        
+        throw new Error(errorMessage);
       }
     } catch (error) {
       console.error('Error saving feedback:', error);

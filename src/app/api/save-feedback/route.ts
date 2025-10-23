@@ -65,8 +65,21 @@ export async function POST(request: NextRequest) {
         console.log('Original response not found for feedback reference update');
       }
     } else {
-      // Mock mode - save to localStorage (for local testing)
-      console.log('Mock mode: Feedback would be saved to database:', feedbackData);
+      // Redis not available - return error
+      console.error('Redis not available - cannot save feedback');
+      return NextResponse.json(
+        { 
+          error: 'Database connection not available. Cannot save feedback.',
+          debug: {
+            redisAvailable: false,
+            environmentVariables: {
+              urlSet: !!process.env.UPSTASH_REDIS_REST_URL,
+              tokenSet: !!process.env.UPSTASH_REDIS_REST_TOKEN
+            }
+          }
+        },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({
