@@ -57,7 +57,18 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
 
       if (response.ok) {
         setFeedbackPopupOpen(false);
-        alert('Thank you for your feedback!');
+        // Use a custom alert to control the title
+        const customAlert = document.createElement('div');
+        customAlert.innerHTML = `
+          <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+            <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); text-align: center;">
+              <h3 style="margin: 0 0 10px 0; color: #333;">Auvra Team says</h3>
+              <p style="margin: 0 0 15px 0; color: #666;">Thank you for your feedback!</p>
+              <button onclick="this.parentElement.parentElement.parentElement.remove()" style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">OK</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(customAlert);
       } else {
         const errorData = await response.json();
         console.error('API Error:', errorData);
