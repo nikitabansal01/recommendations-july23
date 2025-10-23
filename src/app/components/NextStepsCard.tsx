@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './NextStepsCard.module.css';
 
 interface NextStepsCardProps {
@@ -10,45 +10,40 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
   hasLabResults = false, 
   hasDownloadedReport = false 
 }) => {
-  const [steps, setSteps] = useState([
+  const steps = [
     {
       id: 'lab-results',
-      text: 'Upload your lab results',
-      completed: hasLabResults,
-      icon: '📊'
+      title: 'Upload your lab results',
+      description: 'Helps us personalize your insights further',
+      buttonText: 'Upload Labs',
+      buttonAction: () => console.log('Upload labs clicked'),
+      completed: hasLabResults
     },
     {
       id: 'download-report',
-      text: 'Download your hormone report',
-      completed: hasDownloadedReport,
-      icon: '📄'
+      title: 'Download your hormone report',
+      description: 'Your full summary in PDF',
+      buttonText: 'Download PDF',
+      buttonAction: () => console.log('Download PDF clicked'),
+      completed: hasDownloadedReport
     },
     {
       id: 'action-plan',
-      text: 'See your personalized action plan',
-      completed: false,
-      icon: '🧠',
-      isPrimary: true
+      title: 'See your personalized action plan',
+      description: '3-month overview of what your body needs',
+      buttonText: 'View Action Plan',
+      buttonAction: () => console.log('View action plan clicked'),
+      completed: false
     },
     {
       id: 'mobile-app',
-      text: 'Sign up for early access to the mobile app',
-      completed: false,
-      icon: '🚀'
+      title: 'Sign up for early access to our app',
+      description: 'Get daily support when we launch',
+      buttonText: 'Join Waitlist',
+      buttonAction: () => console.log('Join waitlist clicked'),
+      completed: false
     }
-  ]);
-
-  const handleStepClick = (id: string) => {
-    if (id === 'action-plan') {
-      console.log('Navigate to action plan');
-    } else if (id === 'mobile-app') {
-      console.log('Navigate to mobile app signup');
-    }
-    
-    setSteps(prev => prev.map(step => 
-      step.id === id ? { ...step, completed: !step.completed } : step
-    ));
-  };
+  ];
 
   return (
     <div className={styles.card}>
@@ -61,31 +56,20 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
       {/* Steps List */}
       <div className={styles.stepsList}>
         {steps.map((step) => (
-          <div
-            key={step.id}
-            className={`${styles.step} ${
-              step.completed ? styles.completed : styles.active
-            }`}
-            onClick={() => handleStepClick(step.id)}
-          >
-            {/* Checkbox */}
-            <div className={styles.checkbox}>
-              {step.completed ? (
-                <span className={styles.checkmark}>✅</span>
-              ) : (
-                <span className={styles.emptyCheckbox}>☐</span>
-              )}
+          <div key={step.id} className={styles.step}>
+            {/* Step Content */}
+            <div className={styles.stepContent}>
+              <h3 className={styles.stepTitle}>{step.title}</h3>
+              <p className={styles.stepDescription}>→ {step.description}</p>
             </div>
-
-            {/* Icon */}
-            <div className={styles.stepIcon}>
-              <span>{step.icon}</span>
-            </div>
-
-            {/* Text */}
-            <div className={styles.stepText}>
-              {step.text}
-            </div>
+            
+            {/* Action Button */}
+            <button 
+              className={`${styles.stepButton} ${step.completed ? styles.completed : ''}`}
+              onClick={step.buttonAction}
+            >
+              {step.buttonText}
+            </button>
           </div>
         ))}
       </div>
