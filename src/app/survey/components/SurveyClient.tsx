@@ -233,11 +233,8 @@ const SurveyClient: React.FC<SurveyClientProps> = ({
   };
   return (
     <div className={styles.container}>
-      <div style={{ position: 'absolute', top: 16, right: 16, color: '#fff', fontSize: '0.95em', fontWeight: 'normal', zIndex: 1000 }}>
-        🚧 This is a Beta Version — We&apos;re still improving!
-      </div>
       <div className={styles.header}>
-        <h1 className={styles.title}>Hormone Health Survey</h1>
+        <h1 className={styles.title}>Hormone Health Assessment</h1>
         <div className={styles.progressBar}>
           <div 
             className={styles.progressFill} 

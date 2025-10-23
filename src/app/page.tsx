@@ -29,7 +29,7 @@ export default function Home() {
         </Link>
         
         {/* Admin Link - Only show in development */}
-        {process.env.NODE_ENV === 'development' && (
+        {process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_SHOW_ADMIN === 'true' && (
           <div className={styles.adminLink}>
             <Link href="/admin-dashboard" className={styles.adminButton}>
               🔬 Medical Expert Dashboard

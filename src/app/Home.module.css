@@ -1,10 +1,25 @@
 .container {
-  min-height: 100vh;
+  min-height: calc(100vh - 100px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #A29AEA 0%, #C17EC9 25%, #D482B9 50%, #E98BAC 75%, #FDC6D1 100%);
+  position: relative;
+}
+
+.betaBadge {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #2d3748;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
 }
 
 .content {
@@ -21,6 +36,7 @@
   font-size: 2.5rem;
   font-weight: 700;
   color: #2d3748;
+  margin-top: 30px;
   margin-bottom: 20px;
   line-height: 1.2;
 }
@@ -54,7 +70,7 @@
 }
 
 .startButton {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #A29AEA 0%, #C17EC9 25%, #D482B9 50%, #E98BAC 75%, #FDC6D1 100%);
   color: white;
   border: none;
   border-radius: 50px;
