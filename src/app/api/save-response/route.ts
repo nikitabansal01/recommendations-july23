@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Redis } from '@upstash/redis';
+import { generateDualTimestamps } from '../../lib/timestampUtils';
 
 // Initialize Upstash Redis client with error handling
 let redis: Redis | null = null;
@@ -48,13 +49,14 @@ export async function POST(request: NextRequest) {
     const responseId = `response_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     // Save the response data
+    const timestamps = generateDualTimestamps();
     const responseData = {
       id: responseId,
       surveyData,
       results,
       email: email || null,
-      timestamp: timestamp || new Date().toISOString(),
-      createdAt: new Date().toISOString()
+      timestamp: timestamp || timestamps.timestamp, // Use provided timestamp or generate new one
+      ...timestamps
     };
 
     // 저장될 데이터 콘솔 출력

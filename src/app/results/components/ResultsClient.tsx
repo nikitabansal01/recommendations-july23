@@ -5,6 +5,7 @@ import styles from '../Results.module.css';
 import { SurveyResponses } from '../../types/SurveyResponses';
 import { ResultsSummary } from '../../types/ResultsSummary';
 import FeedbackPopup, { FeedbackData } from '../../components/FeedbackPopup';
+import { generateDualTimestamps } from '../../lib/timestampUtils';
 
 interface ResultsClientProps {
   initialData: {
@@ -48,12 +49,12 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
     try {
       // For local testing, save to localStorage
       if (initialData.id.startsWith('mock_')) {
+        const timestamps = generateDualTimestamps();
         const feedbackData = {
           id: `feedback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           responseId: initialData.id,
           ...feedback,
-          timestamp: new Date().toISOString(),
-          createdAt: new Date().toISOString()
+          ...timestamps
         };
         
         localStorage.setItem(feedbackData.id, JSON.stringify(feedbackData));

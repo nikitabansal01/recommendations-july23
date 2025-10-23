@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Redis } from '@upstash/redis';
+import { generateDualTimestamps } from '../../lib/timestampUtils';
 
 let redis: Redis | null = null;
 
@@ -36,6 +37,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const timestamps = generateDualTimestamps();
     const feedbackData = {
       id: `feedback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       responseId,
@@ -43,8 +45,7 @@ export async function POST(request: NextRequest) {
       comments: feedback.comments || '',
       experience: feedback.experience || '',
       improvements: feedback.improvements || '',
-      timestamp: new Date().toISOString(),
-      createdAt: new Date().toISOString()
+      ...timestamps
     };
 
     if (redis) {
