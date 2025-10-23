@@ -431,8 +431,8 @@
 }
 
 .downloadButton {
-  background: #48bb78;
-  color: white;
+  background: #fff;
+  color: #C17EC9;
   border: none;
   border-radius: 25px;
   padding: 16px 32px;
@@ -444,14 +444,14 @@
 }
 
 .downloadButton:hover {
-  background: #38a169;
+  background: rgba(255, 255, 255, 0.9);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
 }
 
 .restartButton {
-  background: #ed8936;
-  color: white;
+  background: #F7D1E0;
+  color: #C17EC9;
   border: none;
   border-radius: 25px;
   padding: 16px 32px;
@@ -463,13 +463,13 @@
 }
 
 .restartButton:hover {
-  background: #dd6b20;
+  background: rgba(255, 255, 255, 0.5);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(237, 137, 54, 0.4);
 }
 
 .recommendationsButton {
-  background: #9c27b0;
+  background: #C17EC9;
   color: white;
   border: none;
   border-radius: 25px;
@@ -483,7 +483,7 @@
 }
 
 .recommendationsButton:hover {
-  background: #7b1fa2;
+  background: #A86BB4;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(156, 39, 176, 0.4);
 }
