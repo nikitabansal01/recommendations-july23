@@ -49,7 +49,9 @@ export async function POST(request: NextRequest) {
 
     if (redis) {
       // Save to Redis
+      console.log('Saving feedback to Redis:', feedbackData);
       await redis.set(`feedback:${feedbackData.id}`, JSON.stringify(feedbackData));
+      console.log('Feedback saved to Redis successfully');
       
       // Also update the original response with feedback reference
       const existingResponse = await redis.get(`response:${responseId}`);
@@ -58,6 +60,9 @@ export async function POST(request: NextRequest) {
         responseData.feedbackId = feedbackData.id;
         responseData.feedbackSubmitted = true;
         await redis.set(`response:${responseId}`, JSON.stringify(responseData));
+        console.log('Updated original response with feedback reference');
+      } else {
+        console.log('Original response not found for feedback reference update');
       }
     } else {
       // Mock mode - save to localStorage (for local testing)
