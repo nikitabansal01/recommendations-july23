@@ -1,0 +1,145 @@
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f3f4f6;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.headerIcon {
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.stepsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.stepItem:hover {
+  border-color: #d1d5db;
+}
+
+.stepItem.completed {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.stepItem.primary {
+  background: #faf5ff;
+  border-color: #c4b5fd;
+}
+
+.stepItem.primary:hover {
+  border-color: #a78bfa;
+}
+
+.checkbox {
+  flex-shrink: 0;
+  margin-right: 16px;
+}
+
+.checkboxCompleted {
+  width: 24px;
+  height: 24px;
+  background: #10b981;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkboxCompleted span {
+  color: white;
+  font-size: 14px;
+}
+
+.checkboxEmpty {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+}
+
+.checkboxEmpty.primary {
+  border-color: #a78bfa;
+}
+
+.stepIcon {
+  flex-shrink: 0;
+  margin-right: 12px;
+  font-size: 18px;
+}
+
+.stepText {
+  flex: 1;
+  font-weight: 500;
+}
+
+.stepText.completed {
+  color: #059669;
+  text-decoration: line-through;
+}
+
+.stepText.primary {
+  color: #7c3aed;
+}
+
+.stepText.default {
+  color: #374151;
+}
+
+.primaryArrow {
+  flex-shrink: 0;
+  color: #8b5cf6;
+  font-size: 18px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .card {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .header {
+    margin-bottom: 16px;
+  }
+  
+  .title {
+    font-size: 18px;
+  }
+  
+  .stepsList {
+    gap: 12px;
+  }
+  
+  .stepItem {
+    padding: 12px;
+  }
+}
