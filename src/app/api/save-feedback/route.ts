@@ -61,7 +61,10 @@ export async function POST(request: NextRequest) {
       // Also update the original response with feedback reference
       const existingResponse = await redis.get(responseId);
       if (existingResponse) {
-        const responseData = JSON.parse(existingResponse as string);
+        // existingResponse is already an object, no need to parse
+        const responseData = typeof existingResponse === 'string' 
+          ? JSON.parse(existingResponse) 
+          : existingResponse;
         responseData.feedbackId = feedbackData.id;
         responseData.feedbackSubmitted = true;
         await redis.set(responseId, JSON.stringify(responseData));
