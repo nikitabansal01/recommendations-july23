@@ -35,11 +35,11 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
   const [feedbackPopupOpen, setFeedbackPopupOpen] = useState(false);
   const [feedbackSubmitting, setFeedbackSubmitting] = useState(false);
 
-  // 20-second timer for feedback popup
+  // 30-second timer for feedback popup
   useEffect(() => {
     const timer = setTimeout(() => {
       setFeedbackPopupOpen(true);
-    }, 20000); // 20 seconds
+    }, 30000); // 30 seconds
 
     return () => clearTimeout(timer);
   }, []);
