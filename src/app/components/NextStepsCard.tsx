@@ -12,28 +12,20 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
 }) => {
   const steps = [
     {
-      id: 'lab-results',
-      title: 'Upload your lab results',
-      description: 'Helps us personalize your insights further',
-      buttonText: 'Upload Labs',
-      buttonAction: () => console.log('Upload labs clicked'),
-      completed: hasLabResults
-    },
-    {
-      id: 'download-report',
-      title: 'Download your hormone report',
-      description: 'Your full summary in PDF',
-      buttonText: 'Download PDF',
-      buttonAction: () => console.log('Download PDF clicked'),
-      completed: hasDownloadedReport
-    },
-    {
       id: 'action-plan',
       title: 'See your personalized action plan',
       description: '3-month overview of what your body needs',
       buttonText: 'View Action Plan',
       buttonAction: () => console.log('View action plan clicked'),
       completed: false
+    },
+    {
+      id: 'lab-results',
+      title: 'Start again with recent lab values',
+      description: 'Upload labs for higher accuracy and faster results',
+      buttonText: 'Retake with Lab Results',
+      buttonAction: () => window.location.href = '/',
+      completed: hasLabResults
     },
     {
       id: 'mobile-app',

@@ -66,21 +66,25 @@
 }
 
 .stepButton {
-  padding: 10px 20px;
-  border-radius: 6px;
-  border: 2px solid #3b82f6;
-  background: #3b82f6;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: 2px solid #C17EC9;
+  background: #C17EC9;
   color: white;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  min-width: 140px;
+  text-align: center;
 }
 
 .stepButton:hover {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #A29AEA;
+  border-color: #A29AEA;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(193, 126, 201, 0.3);
 }
 
 .stepButton.completed {
@@ -91,6 +95,7 @@
 .stepButton.completed:hover {
   background: #059669;
   border-color: #059669;
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
 }
 
 /* Mobile responsive */
@@ -126,5 +131,7 @@
   .stepButton {
     align-self: stretch;
     text-align: center;
+    min-width: auto;
+    width: 100%;
   }
 }
