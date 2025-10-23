@@ -292,17 +292,20 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
             </div>
           )}
           <div className={styles.recommendations}>
-            <h2 className={styles.resultTitle}>Join Us on the Journey</h2>
+            <h2 className={styles.resultTitle}>Be Part of What&apos;s Next in Hormone Health</h2>
             <p className={styles.description}>
-              We&apos;re building something meaningful for your hormone health. Stay connected, explore our content, and be among the first to experience it.
+              We&apos;re building something meaningful to help you better understand and support your body.
+              Stay in the loop, explore our latest insights, and be among the first to experience what&apos;s coming.
             </p>
             <div className={styles.linkList}>
               <div className={styles.linkItem}>
                 <a href="https://forms.fillout.com/t/x8xyYYpek3us" target="_blank" rel="noopener noreferrer" className={styles.textLink}>
                   <span className={styles.icon} style={{verticalAlign: 'middle', marginRight: 8}}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 16.5L8.5 15.5L15.5 8.5C16.3284 7.67157 17.6716 7.67157 18.5 8.5C19.3284 9.32843 19.3284 10.6716 18.5 11.5L11.5 18.5L10.5 25L2 16.5Z" fill="#FF9800"/><circle cx="17" cy="7" r="2" fill="#90CAF9"/></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="#FF9800"/>
+                    </svg>
                   </span>
-                  Join our Waitlist – Be the First to Know!
+                  🔔 Join the Waitlist →
                 </a>
               </div>
               <div className={styles.linkItem}>
@@ -323,6 +326,16 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
                     </svg>
                   </span>
                   Connect with us on LinkedIn
+                </a>
+              </div>
+              <div className={styles.linkItem}>
+                <a href="mailto:nbansal@hormoneinsight.ai" className={styles.textLink}>
+                  <span className={styles.icon} style={{verticalAlign: 'middle', marginRight: 8}}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" fill="#4CAF50"/>
+                    </svg>
+                  </span>
+                  ✉️ Share Your Thoughts →
                 </a>
               </div>
             </div>
