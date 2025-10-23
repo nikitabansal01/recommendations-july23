@@ -38,7 +38,13 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
     }
   ]);
 
-  const toggleStep = (id: string) => {
+  const handleStepClick = (id: string) => {
+    if (id === 'action-plan') {
+      console.log('Navigate to action plan');
+    } else if (id === 'mobile-app') {
+      console.log('Navigate to mobile app signup');
+    }
+    
     setSteps(prev => prev.map(step => 
       step.id === id ? { ...step, completed: !step.completed } : step
     ));
@@ -57,22 +63,17 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
         {steps.map((step) => (
           <div
             key={step.id}
-            className={`${styles.stepItem} ${
-              step.completed ? styles.completed : 
-              step.isPrimary ? styles.primary : ''
+            className={`${styles.step} ${
+              step.completed ? styles.completed : styles.active
             }`}
-            onClick={() => !step.isPrimary && toggleStep(step.id)}
+            onClick={() => handleStepClick(step.id)}
           >
             {/* Checkbox */}
             <div className={styles.checkbox}>
               {step.completed ? (
-                <div className={styles.checkboxCompleted}>
-                  <span>✓</span>
-                </div>
+                <span className={styles.checkmark}>✅</span>
               ) : (
-                <div className={`${styles.checkboxEmpty} ${
-                  step.isPrimary ? styles.primary : ''
-                }`} />
+                <span className={styles.emptyCheckbox}>☐</span>
               )}
             </div>
 
@@ -82,19 +83,9 @@ const NextStepsCard: React.FC<NextStepsCardProps> = ({
             </div>
 
             {/* Text */}
-            <div className={`${styles.stepText} ${
-              step.completed ? styles.completed : 
-              step.isPrimary ? styles.primary : styles.default
-            }`}>
+            <div className={styles.stepText}>
               {step.text}
             </div>
-
-            {/* Primary CTA Arrow */}
-            {step.isPrimary && (
-              <div className={styles.primaryArrow}>
-                <span>→</span>
-              </div>
-            )}
           </div>
         ))}
       </div>

@@ -27,67 +27,44 @@
 .stepsList {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
-.stepItem {
+.step {
   display: flex;
   align-items: center;
   padding: 16px;
   border-radius: 8px;
-  border: 2px solid #e5e7eb;
-  background: #f9fafb;
   transition: all 0.2s ease;
   cursor: pointer;
 }
 
-.stepItem:hover {
-  border-color: #d1d5db;
+.step.active {
+  border: 1px solid #ccc;
+  background: #f9fafb;
 }
 
-.stepItem.completed {
-  background: #f0fdf4;
-  border-color: #bbf7d0;
+.step.active:hover {
+  background: #f3f4f6;
 }
 
-.stepItem.primary {
-  background: #faf5ff;
-  border-color: #c4b5fd;
-}
-
-.stepItem.primary:hover {
-  border-color: #a78bfa;
+.step.completed {
+  background-color: #e6f9ec;
+  border: 1px solid #4caf50;
 }
 
 .checkbox {
   flex-shrink: 0;
   margin-right: 16px;
+  font-size: 18px;
 }
 
-.checkboxCompleted {
-  width: 24px;
-  height: 24px;
-  background: #10b981;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.checkmark {
+  color: #4caf50;
 }
 
-.checkboxCompleted span {
-  color: white;
-  font-size: 14px;
-}
-
-.checkboxEmpty {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid #d1d5db;
-}
-
-.checkboxEmpty.primary {
-  border-color: #a78bfa;
+.emptyCheckbox {
+  color: #666;
 }
 
 .stepIcon {
@@ -99,25 +76,12 @@
 .stepText {
   flex: 1;
   font-weight: 500;
-}
-
-.stepText.completed {
-  color: #059669;
-  text-decoration: line-through;
-}
-
-.stepText.primary {
-  color: #7c3aed;
-}
-
-.stepText.default {
   color: #374151;
 }
 
-.primaryArrow {
-  flex-shrink: 0;
-  color: #8b5cf6;
-  font-size: 18px;
+.step.completed .stepText {
+  color: #4caf50;
+  text-decoration: line-through;
 }
 
 /* Mobile responsive */
@@ -136,10 +100,10 @@
   }
   
   .stepsList {
-    gap: 12px;
+    gap: 8px;
   }
   
-  .stepItem {
+  .step {
     padding: 12px;
   }
 }

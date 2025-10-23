@@ -17,8 +17,8 @@
 }
 
 .socialLinks {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
 }
 
@@ -26,10 +26,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 12px 16px;
   border-radius: 8px;
   border: 2px solid #e5e7eb;
-  background: #f9fafb;
+  background: transparent;
   color: #6b7280;
   font-size: 14px;
   font-weight: 500;
@@ -39,48 +39,29 @@
 
 .socialLink:hover {
   border-color: #d1d5db;
-  background: #f3f4f6;
-}
-
-.socialLink.instagram:hover {
-  border-color: #f9a8d4;
-  background: #fdf2f8;
-}
-
-.socialLink.linkedin:hover {
-  border-color: #93c5fd;
-  background: #eff6ff;
-}
-
-.socialLink.email:hover {
-  border-color: #86efac;
-  background: #f0fdf4;
+  background: #f9fafb;
+  color: #374151;
 }
 
 .socialIcon {
   margin-right: 8px;
-  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .socialText {
-  display: none;
+  font-size: 14px;
 }
 
-.socialTextShort {
-  display: inline;
-}
-
-/* Tablet and desktop */
+/* Tablet and desktop - horizontal layout */
 @media (min-width: 640px) {
   .socialLinks {
-    grid-template-columns: repeat(3, 1fr);
+    flex-direction: row;
+    gap: 16px;
   }
   
-  .socialText {
-    display: inline;
-  }
-  
-  .socialTextShort {
-    display: none;
+  .socialLink {
+    flex: 1;
   }
 }
