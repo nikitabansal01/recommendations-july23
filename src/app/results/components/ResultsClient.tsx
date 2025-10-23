@@ -1,9 +1,10 @@
 "use client";
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '../Results.module.css';
 import { SurveyResponses } from '../../types/SurveyResponses';
 import { ResultsSummary } from '../../types/ResultsSummary';
+import FeedbackPopup, { FeedbackData } from '../../components/FeedbackPopup';
 
 interface ResultsClientProps {
   initialData: {
@@ -27,6 +28,62 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
   const [emailError, setEmailError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [responseData, setResponseData] = useState<typeof initialData>(initialData);
+  
+  // State for feedback popup
+  const [feedbackPopupOpen, setFeedbackPopupOpen] = useState(false);
+  const [feedbackSubmitting, setFeedbackSubmitting] = useState(false);
+
+  // 20-second timer for feedback popup
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFeedbackPopupOpen(true);
+    }, 20000); // 20 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Handle feedback submission
+  const handleFeedbackSubmit = async (feedback: FeedbackData) => {
+    setFeedbackSubmitting(true);
+    try {
+      // For local testing, save to localStorage
+      if (initialData.id.startsWith('mock_')) {
+        const feedbackData = {
+          id: `feedback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          responseId: initialData.id,
+          ...feedback,
+          timestamp: new Date().toISOString(),
+          createdAt: new Date().toISOString()
+        };
+        
+        localStorage.setItem(feedbackData.id, JSON.stringify(feedbackData));
+        setFeedbackPopupOpen(false);
+        alert('Thank you for your feedback! (Saved locally for testing)');
+        return;
+      }
+
+      const response = await fetch('/api/save-feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          responseId: initialData.id,
+          feedback
+        })
+      });
+
+      if (response.ok) {
+        setFeedbackPopupOpen(false);
+        alert('Thank you for your feedback!');
+      } else {
+        throw new Error('Failed to save feedback');
+      }
+    } catch (error) {
+      console.error('Error saving feedback:', error);
+      alert('Failed to save feedback. Please try again.');
+    } finally {
+      setFeedbackSubmitting(false);
+    }
+  };
 
   // 이메일 업데이트
   const handleEmailUpdate = async () => {
@@ -344,6 +401,14 @@ const ResultsClient: React.FC<ResultsClientProps> = ({ initialData }) => {
         This analysis is for informational purposes only and should not replace professional medical advice. 
         Always consult with a qualified healthcare provider for diagnosis and treatment.
       </div>
+      
+      {/* Feedback Popup */}
+      <FeedbackPopup
+        isOpen={feedbackPopupOpen}
+        onClose={() => setFeedbackPopupOpen(false)}
+        onSubmit={handleFeedbackSubmit}
+        submitting={feedbackSubmitting}
+      />
     </div>
   );
 };
