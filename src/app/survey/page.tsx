@@ -4,13 +4,13 @@ import SurveyClient from './components/SurveyClient';
 const questions: Question[] = [
   {
     id: 'q1_period',
-    question: 'Do you currently have regular menstrual periods?',
+    question: 'Do you currently have regular periods?',
     type: 'radio',
     options: ['Yes', 'No', 'No period']
   },
   {
     id: 'q1_cycle_length',
-    question: 'What is your average cycle length in days?',
+    question: 'On average, how many days are there between the start of one period and the next?',
     type: 'number',
     conditional: 'q1_period',
     conditionalValue: 'Yes'
