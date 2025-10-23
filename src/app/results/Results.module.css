@@ -1,6 +1,5 @@
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #A29AEA 0%, #764ba2 100%);
   padding: 20px;
 }
 
@@ -90,15 +89,15 @@
 
 /* Report Content (for PDF capture) */
 .reportContent {
-  background: white;
-  border-radius: 20px;
-  padding: 25px;
+  /* background: white; */
+  /* border-radius: 20px; */
+  /* padding: 25px; */
   margin-bottom: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */
 }
 
 .resultsContainer {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 

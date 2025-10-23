@@ -2,7 +2,6 @@
   min-height: calc(100vh - 100px);
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #A29AEA 0%, #C17EC9 25%, #D482B9 50%, #E98BAC 75%, #FDC6D1 100%);
   padding: 20px;
 }
 
